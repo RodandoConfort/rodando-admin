@@ -1,0 +1,73 @@
+<section class="login-page">
+  <div class="login-page__background">
+    <span class="login-page__orb login-page__orb--primary"></span>
+    <span class="login-page__orb login-page__orb--secondary"></span>
+    <span class="login-page__grid"></span>
+  </div>
+
+  <div class="login-page__content">
+    <section class="login-page__hero" aria-label="Información de la plataforma">
+      <div class="login-page__brand">
+        <span class="login-page__brand-mark">R</span>
+
+        <div class="login-page__brand-text">
+          <strong>Rodando</strong>
+          <span>Logistics Admin</span>
+        </div>
+      </div>
+
+      <div class="login-page__hero-copy">
+        <span class="login-page__eyebrow">Panel administrativo</span>
+
+        <h1>Gestiona operaciones, usuarios y logística desde una plataforma moderna.</h1>
+
+        <p>
+          Accede al sistema para monitorear métricas, administrar conductores, revisar viajes y
+          controlar la operación en tiempo real.
+        </p>
+      </div>
+
+      <div class="login-page__features">
+        <article class="login-page__feature">
+          <mat-icon>shield</mat-icon>
+          <span>Acceso seguro</span>
+        </article>
+
+        <article class="login-page__feature">
+          <mat-icon>monitoring</mat-icon>
+          <span>Métricas en tiempo real</span>
+        </article>
+
+        <article class="login-page__feature">
+          <mat-icon>route</mat-icon>
+          <span>Control operacional</span>
+        </article>
+      </div>
+    </section>
+
+    <mat-card class="login-card" appearance="outlined">
+      <mat-card-header class="login-card__header">
+        <div class="login-card__icon">
+          <mat-icon>lock</mat-icon>
+        </div>
+
+        <mat-card-title>Iniciar sesión</mat-card-title>
+        <mat-card-subtitle>Ingresa tus credenciales para continuar</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <app-dynamic-form
+          [config]="formConfig"
+          [saving]="authStore.loading()"
+          [error]="authStore.error()"
+          (submitted)="submit($event)"
+        />
+      </mat-card-content>
+
+      <mat-card-footer class="login-card__footer">
+        <span>© 2026 Rodando</span>
+        <span>Admin Platform</span>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+</section>
