@@ -1,0 +1,44 @@
+<div class="file-field">
+  <label class="file-field__label">{{ field().label }}</label>
+
+  <div class="file-field__dropzone">
+    <mat-icon class="file-field__icon">description</mat-icon>
+
+    @if (fileName()) {
+      <p class="file-field__name">{{ fileName() }}</p>
+    } @else {
+      <p class="file-field__placeholder">
+        {{ field().placeholder ?? 'Selecciona o sube un archivo' }}
+      </p>
+    }
+
+    @if (field().hint) {
+      <p class="file-field__hint">{{ field().hint }}</p>
+    }
+
+    <input
+      #fileInput
+      class="file-field__input"
+      type="file"
+      [accept]="field().accept ?? ''"
+      [multiple]="field().multiple ?? false"
+      (change)="onFileSelected($event)"
+    />
+
+    <div class="file-field__actions">
+      <button mat-stroked-button type="button" (click)="fileInput.click()">
+        Buscar archivo
+      </button>
+
+      @if (fileName()) {
+        <button mat-button type="button" (click)="clear()">
+          Quitar
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (control().invalid && (control().touched || control().dirty)) {
+    <p class="file-field__error">{{ errorMessage() }}</p>
+  }
+</div>

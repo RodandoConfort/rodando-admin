@@ -1,0 +1,29 @@
+.table-skeleton {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.table-skeleton__row {
+  display: grid;
+  grid-template-columns: repeat(var(--table-skeleton-columns, 5), minmax(0, 1fr));
+  gap: 16px;
+}
+
+.table-skeleton__cell {
+  height: 20px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e5e7eb, #f8fafc, #e5e7eb);
+  background-size: 200% 100%;
+  animation: table-skeleton-loading 1.4s ease-in-out infinite;
+}
+
+@keyframes table-skeleton-loading {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}

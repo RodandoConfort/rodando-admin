@@ -1,0 +1,18 @@
+<section
+  class="page-loader"
+  [style.min-height]="minHeight()"
+  role="status"
+  aria-live="polite"
+>
+  <div class="page-loader__surface">
+    <mat-spinner diameter="44" />
+
+    <div class="page-loader__copy">
+      <strong>{{ title() }}</strong>
+
+      @if (description()) {
+        <p>{{ description() }}</p>
+      }
+    </div>
+  </div>
+</section>

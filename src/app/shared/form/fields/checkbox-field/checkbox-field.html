@@ -1,0 +1,7 @@
+<mat-checkbox [formControl]="control()">
+  {{ field().label }}
+</mat-checkbox>
+
+@if (field().hint) {
+  <p class="field-hint">{{ field().hint }}</p>
+}

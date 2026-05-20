@@ -1,0 +1,94 @@
+.image-field {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.image-field__label {
+  color: var(--app-text);
+  font-weight: 850;
+}
+
+.image-field__content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 10.5rem;
+  padding: 1rem;
+  border: 1px solid var(--app-border);
+  border-radius: 1.15rem;
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 78%,
+    var(--app-surface)
+  );
+}
+
+.image-field__preview {
+  width: 7.5rem;
+  height: 7.5rem;
+  display: grid;
+  flex: 0 0 7.5rem;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: var(--app-surface-3);
+  color: var(--app-text-muted);
+  border: 1px solid var(--app-border);
+
+  mat-icon {
+    width: 1.7rem;
+    height: 1.7rem;
+    font-size: 1.7rem;
+    color: var(--app-text-muted);
+  }
+}
+
+.image-field__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-field__body {
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.image-field__hint,
+.image-field__error {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.image-field__hint {
+  color: var(--app-text-muted);
+  font-weight: 600;
+}
+
+.image-field__error {
+  color: var(--app-danger);
+  font-weight: 800;
+}
+
+.image-field__input {
+  display: none;
+}
+
+.image-field__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+@media (width <= 640px) {
+  .image-field__content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .image-field__preview {
+    margin-inline: auto;
+  }
+}

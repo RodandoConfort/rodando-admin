@@ -1,0 +1,45 @@
+<div class="image-field">
+  <label class="image-field__label">{{ field().label }}</label>
+
+  <div class="image-field__content">
+    <div class="image-field__preview">
+      @if (currentPreviewUrl(); as url) {
+        <img [src]="url" [alt]="field().label" />
+      } @else {
+        <mat-icon>photo_camera</mat-icon>
+      }
+    </div>
+
+    <div class="image-field__body">
+      @if (field().hint) {
+        <p class="image-field__hint">{{ field().hint }}</p>
+      } @else {
+        <p class="image-field__hint">Sube una imagen clara.</p>
+      }
+
+      <input
+        #imageInput
+        class="image-field__input"
+        type="file"
+        [accept]="field().accept ?? 'image/png,image/jpeg,image/webp'"
+        (change)="onFileSelected($event)"
+      />
+
+      <div class="image-field__actions">
+        <button mat-stroked-button type="button" (click)="imageInput.click()">
+          Seleccionar imagen
+        </button>
+
+        @if (currentPreviewUrl()) {
+          <button mat-button type="button" (click)="clear()">
+            Quitar
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (control().invalid && (control().touched || control().dirty)) {
+    <p class="image-field__error">{{ errorMessage() }}</p>
+  }
+</div>

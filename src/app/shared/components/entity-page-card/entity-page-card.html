@@ -1,0 +1,220 @@
+<article class="entity-page-card">
+  <mat-card class="entity-page-card__surface" appearance="outlined">
+    <header class="entity-page-card__header">
+      <div class="entity-page-card__heading">
+        @if (icon()) {
+          <span class="entity-page-card__icon">
+            <mat-icon>{{ icon() }}</mat-icon>
+          </span>
+        }
+
+        <div class="entity-page-card__titles">
+          <h1>{{ title() }}</h1>
+
+          @if (subtitle()) {
+            <p>{{ subtitle() }}</p>
+          }
+        </div>
+      </div>
+
+      @if (hasHeaderActions()) {
+        <div class="entity-page-card__header-actions">
+          @for (action of visibleHeaderActions(); track action.key) {
+            @switch (action.variant ?? 'text') {
+              @case ('filled') {
+                <button
+                  mat-flat-button
+                  type="button"
+                  class="entity-page-card__action entity-page-card__action--filled"
+                  [class.entity-page-card__action--primary]="(action.tone ?? 'primary') === 'primary'"
+                  [class.entity-page-card__action--neutral]="action.tone === 'neutral'"
+                  [class.entity-page-card__action--danger]="action.tone === 'danger'"
+                  [disabled]="action.disabled || action.loading"
+                  [attr.aria-label]="action.ariaLabel ?? action.label"
+                  (click)="emitAction(action)"
+                >
+                  @if (action.loading) {
+                    <mat-spinner diameter="18"></mat-spinner>
+                  } @else if (action.icon) {
+                    <mat-icon>{{ action.icon }}</mat-icon>
+                  }
+
+                  <span>{{ action.label }}</span>
+                </button>
+              }
+
+              @case ('outlined') {
+                <button
+                  mat-stroked-button
+                  type="button"
+                  class="entity-page-card__action entity-page-card__action--outlined"
+                  [class.entity-page-card__action--primary]="(action.tone ?? 'primary') === 'primary'"
+                  [class.entity-page-card__action--neutral]="action.tone === 'neutral'"
+                  [class.entity-page-card__action--danger]="action.tone === 'danger'"
+                  [disabled]="action.disabled || action.loading"
+                  [attr.aria-label]="action.ariaLabel ?? action.label"
+                  (click)="emitAction(action)"
+                >
+                  @if (action.loading) {
+                    <mat-spinner diameter="18"></mat-spinner>
+                  } @else if (action.icon) {
+                    <mat-icon>{{ action.icon }}</mat-icon>
+                  }
+
+                  <span>{{ action.label }}</span>
+                </button>
+              }
+
+              @case ('icon') {
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="entity-page-card__icon-action"
+                  [class.entity-page-card__icon-action--primary]="(action.tone ?? 'primary') === 'primary'"
+                  [class.entity-page-card__icon-action--neutral]="action.tone === 'neutral'"
+                  [class.entity-page-card__icon-action--danger]="action.tone === 'danger'"
+                  [disabled]="action.disabled || action.loading"
+                  [attr.aria-label]="action.ariaLabel ?? action.label"
+                  (click)="emitAction(action)"
+                >
+                  @if (action.loading) {
+                    <mat-spinner diameter="18"></mat-spinner>
+                  } @else {
+                    <mat-icon>{{ action.icon ?? 'more_horiz' }}</mat-icon>
+                  }
+                </button>
+              }
+
+              @default {
+                <button
+                  mat-button
+                  type="button"
+                  class="entity-page-card__action entity-page-card__action--text"
+                  [class.entity-page-card__action--primary]="(action.tone ?? 'primary') === 'primary'"
+                  [class.entity-page-card__action--neutral]="action.tone === 'neutral'"
+                  [class.entity-page-card__action--danger]="action.tone === 'danger'"
+                  [disabled]="action.disabled || action.loading"
+                  [attr.aria-label]="action.ariaLabel ?? action.label"
+                  (click)="emitAction(action)"
+                >
+                  @if (action.loading) {
+                    <mat-spinner diameter="18"></mat-spinner>
+                  } @else if (action.icon) {
+                    <mat-icon>{{ action.icon }}</mat-icon>
+                  }
+
+                  <span>{{ action.label }}</span>
+                </button>
+              }
+            }
+          }
+        </div>
+      }
+    </header>
+
+    <mat-divider />
+
+    <section class="entity-page-card__content">
+      <ng-content />
+    </section>
+
+    @if (hasFooterActions()) {
+      <mat-divider />
+
+      <footer class="entity-page-card__footer">
+        @for (action of visibleFooterActions(); track action.key) {
+          @switch (action.variant ?? 'filled') {
+            @case ('filled') {
+              <button
+                mat-flat-button
+                [type]="action.type ?? 'button'"
+                [attr.form]="action.formId ?? null"
+                class="entity-page-card__action entity-page-card__action--filled"
+                [class.entity-page-card__action--primary]="(action.tone ?? 'primary') === 'primary'"
+                [class.entity-page-card__action--neutral]="action.tone === 'neutral'"
+                [class.entity-page-card__action--danger]="action.tone === 'danger'"
+                [disabled]="action.disabled || action.loading"
+                [attr.aria-label]="action.ariaLabel ?? action.label"
+                (click)="emitAction(action)"
+              >
+                @if (action.loading) {
+                  <mat-spinner diameter="18"></mat-spinner>
+                } @else if (action.icon) {
+                  <mat-icon>{{ action.icon }}</mat-icon>
+                }
+
+                <span>{{ action.label }}</span>
+              </button>
+            }
+
+            @case ('outlined') {
+              <button
+                mat-stroked-button
+                [type]="action.type ?? 'button'"
+                [attr.form]="action.formId ?? null"
+                class="entity-page-card__action entity-page-card__action--outlined"
+                [class.entity-page-card__action--primary]="(action.tone ?? 'primary') === 'primary'"
+                [class.entity-page-card__action--neutral]="action.tone === 'neutral'"
+                [class.entity-page-card__action--danger]="action.tone === 'danger'"
+                [disabled]="action.disabled || action.loading"
+                [attr.aria-label]="action.ariaLabel ?? action.label"
+                (click)="emitAction(action)"
+              >
+                @if (action.loading) {
+                  <mat-spinner diameter="18"></mat-spinner>
+                } @else if (action.icon) {
+                  <mat-icon>{{ action.icon }}</mat-icon>
+                }
+
+                <span>{{ action.label }}</span>
+              </button>
+            }
+
+            @case ('text') {
+              <button
+                mat-button
+                [type]="action.type ?? 'button'"
+                [attr.form]="action.formId ?? null"
+                class="entity-page-card__action entity-page-card__action--text"
+                [class.entity-page-card__action--primary]="(action.tone ?? 'primary') === 'primary'"
+                [class.entity-page-card__action--neutral]="action.tone === 'neutral'"
+                [class.entity-page-card__action--danger]="action.tone === 'danger'"
+                [disabled]="action.disabled || action.loading"
+                [attr.aria-label]="action.ariaLabel ?? action.label"
+                (click)="emitAction(action)"
+              >
+                @if (action.loading) {
+                  <mat-spinner diameter="18"></mat-spinner>
+                } @else if (action.icon) {
+                  <mat-icon>{{ action.icon }}</mat-icon>
+                }
+
+                <span>{{ action.label }}</span>
+              </button>
+            }
+
+            @case ('icon') {
+              <button
+                mat-icon-button
+                type="button"
+                class="entity-page-card__icon-action"
+                [class.entity-page-card__icon-action--primary]="(action.tone ?? 'primary') === 'primary'"
+                [class.entity-page-card__icon-action--neutral]="action.tone === 'neutral'"
+                [class.entity-page-card__icon-action--danger]="action.tone === 'danger'"
+                [disabled]="action.disabled || action.loading"
+                [attr.aria-label]="action.ariaLabel ?? action.label"
+                (click)="emitAction(action)"
+              >
+                @if (action.loading) {
+                  <mat-spinner diameter="18"></mat-spinner>
+                } @else {
+                  <mat-icon>{{ action.icon ?? 'more_horiz' }}</mat-icon>
+                }
+              </button>
+            }
+          }
+        }
+      </footer>
+    }
+  </mat-card>
+</article>

@@ -1,0 +1,21 @@
+<button
+  mat-flat-button
+  color="primary"
+  class="submit-button"
+  [class.submit-button--full]="fullWidth()"
+  [type]="type()"
+  [disabled]="disabled() || loading()"
+>
+  <span class="submit-button__content">
+    @if (loading()) {
+      <mat-spinner diameter="20" />
+      <span>{{ loadingLabel() }}</span>
+    } @else {
+      <span>{{ label() }}</span>
+
+      @if (icon()) {
+        <mat-icon>{{ icon() }}</mat-icon>
+      }
+    }
+  </span>
+</button>

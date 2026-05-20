@@ -1,0 +1,9 @@
+<div class="table-skeleton" aria-hidden="true">
+  @for (row of skeletonRows(); track $index) {
+    <div class="table-skeleton__row">
+      @for (column of skeletonColumns(); track $index) {
+        <span class="table-skeleton__cell"></span>
+      }
+    </div>
+  }
+</div>

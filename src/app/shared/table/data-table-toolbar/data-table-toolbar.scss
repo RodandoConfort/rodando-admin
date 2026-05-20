@@ -1,0 +1,108 @@
+:host {
+  display: block;
+}
+
+.data-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 72%,
+    var(--app-surface)
+  );
+  border-bottom: 1px solid var(--app-border);
+}
+
+.data-table-toolbar__search {
+  flex: 1 1 22rem;
+  max-width: 28rem;
+
+  --mat-form-field-container-height: 2.85rem;
+  --mat-form-field-container-vertical-padding: 0.65rem;
+  --mat-form-field-outlined-container-shape: 0.9rem;
+}
+
+.data-table-toolbar__clear-search {
+  width: 2.15rem;
+  height: 2.15rem;
+  min-width: 2.15rem;
+  min-height: 2.15rem;
+  padding: 0;
+  margin-right: 0.25rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--app-text-muted);
+  box-shadow: none;
+
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+
+  mat-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--app-primary) 14%, transparent);
+    color: var(--app-text);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--app-primary) 75%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+.data-table-toolbar__filters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.data-table-toolbar__filter {
+  width: 12rem;
+
+  --mat-form-field-container-height: 2.85rem;
+  --mat-form-field-container-vertical-padding: 0.65rem;
+  --mat-form-field-outlined-container-shape: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .data-table-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .data-table-toolbar__search {
+    width: 100%;
+    max-width: none;
+  }
+
+  .data-table-toolbar__filters {
+    justify-content: stretch;
+  }
+
+  .data-table-toolbar__filter {
+    flex: 1 1 12rem;
+    width: auto;
+  }
+}

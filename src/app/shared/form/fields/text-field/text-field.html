@@ -1,0 +1,45 @@
+<mat-form-field appearance="outline" class="text-field">
+  <mat-label>{{ field().label }}</mat-label>
+
+  @if (field().prefixIcon) {
+    <mat-icon matIconPrefix>{{ field().prefixIcon }}</mat-icon>
+  }
+
+  @if (field().prefixText) {
+  <span matTextPrefix class="text-field__prefix">
+    {{ field().prefixText }}
+  </span>
+}
+
+  <input
+    matInput
+    [type]="inputType()"
+    [formControl]="control()"
+    [placeholder]="field().placeholder ?? ''"
+    [readonly]="field().readonly ?? false"
+    [autocomplete]="field().autocomplete ?? 'off'"
+  />
+
+  @if (field().type === 'password') {
+    <button
+      mat-icon-button
+      matIconSuffix
+      type="button"
+      class="text-field__password-button"
+      [attr.aria-label]="hidePassword() ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+      (click)="togglePasswordVisibility()"
+    >
+      <mat-icon>
+        {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+      </mat-icon>
+    </button>
+  }
+
+  @if (field().hint) {
+    <mat-hint>{{ field().hint }}</mat-hint>
+  }
+
+  @if (control().invalid && (control().touched || control().dirty)) {
+    <mat-error>{{ errorMessage() }}</mat-error>
+  }
+</mat-form-field>

@@ -1,0 +1,19 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{ field().label }}</mat-label>
+
+  <textarea
+    matInput
+    rows="4"
+    [formControl]="control()"
+    [placeholder]="field().placeholder ?? ''"
+    [readonly]="field().readonly ?? false"
+  ></textarea>
+
+  @if (field().hint) {
+    <mat-hint>{{ field().hint }}</mat-hint>
+  }
+
+  @if (control().invalid && (control().touched || control().dirty)) {
+    <mat-error>{{ errorMessage() }}</mat-error>
+  }
+</mat-form-field>

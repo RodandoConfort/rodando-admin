@@ -1,0 +1,183 @@
+<section class="data-table">
+  <article class="data-table__shell">
+    @if (toolbarConfig(); as toolbar) {
+      <app-data-table-toolbar
+        [config]="toolbar"
+        (searchChange)="searchChange.emit($event)"
+        (filterChange)="filterChange.emit($event)"
+      />
+    }
+
+    @if (loading() && items().length === 0) {
+      <app-table-skeleton
+        [rows]="config().loadingRows ?? 5"
+        [columns]="displayedColumnKeys().length || 4"
+      />
+    } @else if (error() && items().length === 0) {
+      <app-empty-state
+        icon="error"
+        title="No se pudieron cargar los datos"
+        [description]="error()"
+        actionLabel="Reintentar"
+        (action)="retry.emit()"
+      />
+    } @else if (items().length === 0) {
+      <app-empty-state
+        icon="inbox"
+        [title]="config().emptyTitle ?? 'No hay datos disponibles'"
+        [description]="config().emptyDescription ?? null"
+        [actionLabel]="config().emptyActionLabel ?? null"
+        (action)="create.emit()"
+      />
+    } @else {
+      <div class="data-table__container">
+        <table mat-table [dataSource]="items()" class="data-table__table">
+          @for (column of visibleColumns(); track column.key) {
+            <ng-container [matColumnDef]="column.key">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="data-table__header-cell"
+                [class.data-table__cell--center]="column.align === 'center'"
+                [class.data-table__cell--end]="column.align === 'end'"
+              >
+                {{ column.label }}
+              </th>
+
+              <td
+                mat-cell
+                *matCellDef="let item"
+                class="data-table__cell"
+                [class.data-table__cell--center]="column.align === 'center'"
+                [class.data-table__cell--end]="column.align === 'end'"
+              >
+                @switch (column.type) {
+                  @case ('avatar') {
+                    <span class="data-table__avatar">
+                      @if (imageUrl(column, item); as url) {
+                        <img [src]="url" [alt]="imageAlt(column, item)" />
+                      } @else {
+                        <span>{{ fallbackText(column, item) }}</span>
+                      }
+                    </span>
+                  }
+
+                  @case ('image') {
+                    @if (imageUrl(column, item); as url) {
+                      <img
+                        class="data-table__image"
+                        [src]="url"
+                        [alt]="imageAlt(column, item)"
+                      />
+                    } @else {
+                      <span>—</span>
+                    }
+                  }
+
+                  @case ('badge') {
+                    <span
+                      class="data-table__badge"
+                      [class.data-table__badge--success]="badgeTone(column, item) === 'success'"
+                      [class.data-table__badge--warning]="badgeTone(column, item) === 'warning'"
+                      [class.data-table__badge--danger]="badgeTone(column, item) === 'danger'"
+                      [class.data-table__badge--info]="badgeTone(column, item) === 'info'"
+                      [class.data-table__badge--neutral]="badgeTone(column, item) === 'neutral'"
+                    >
+                      {{ badgeLabel(column, item) }}
+                    </span>
+                  }
+
+                  @case ('boolean') {
+                    @if (columnValue(column, item)) {
+                      <mat-icon
+                        class="data-table__boolean-icon data-table__boolean-icon--true"
+                      >
+                        verified
+                      </mat-icon>
+                    } @else {
+                      <mat-icon
+                        class="data-table__boolean-icon data-table__boolean-icon--false"
+                      >
+                        close
+                      </mat-icon>
+                    }
+                  }
+
+                  @case ('date') {
+                    {{
+                      dateValue(column, item)
+                        | date: column.dateFormat ?? 'mediumDate'
+                    }}
+                  }
+
+                  @default {
+                    {{ displayValue(column, item) }}
+                  }
+                }
+              </td>
+            </ng-container>
+          }
+
+          @if (hasActions()) {
+            <ng-container matColumnDef="actions">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="data-table__header-cell data-table__cell--end"
+              >
+                Acciones
+              </th>
+
+              <td
+                mat-cell
+                *matCellDef="let item"
+                class="data-table__cell data-table__cell--end"
+              >
+                <div class="data-table__actions">
+                  @for (action of visibleActions(item); track action.key) {
+                    <button
+                      mat-icon-button
+                      type="button"
+                      class="data-table__action"
+                      [class.data-table__action--primary]="action.color === 'primary'"
+                      [class.data-table__action--neutral]="action.color === 'neutral' || !action.color"
+                      [class.data-table__action--danger]="action.color === 'danger'"
+                      [disabled]="isActionDisabled(action, item)"
+                      [attr.aria-label]="action.label"
+                      (click)="emitAction(action, item, $event)"
+                    >
+                      @if (action.icon) {
+                        <mat-icon>{{ action.icon }}</mat-icon>
+                      } @else {
+                        {{ action.label }}
+                      }
+                    </button>
+                  }
+                </div>
+              </td>
+            </ng-container>
+          }
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumnKeys()"
+          ></tr>
+
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumnKeys()"
+            class="data-table__row"
+            (click)="emitRowClick(row)"
+          ></tr>
+        </table>
+      </div>
+
+      @if (paginationConfig(); as pagination) {
+        <app-data-table-pagination
+          [config]="pagination"
+          (pageChange)="pageChange.emit($event)"
+        />
+      }
+    }
+  </article>
+</section>

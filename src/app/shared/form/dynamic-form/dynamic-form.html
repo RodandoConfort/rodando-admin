@@ -1,0 +1,74 @@
+<form class="dynamic-form" [formGroup]="form()" (ngSubmit)="submit()">
+  @if (error()) {
+    <div class="dynamic-form__error" role="alert">
+      <mat-icon>error</mat-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  @if (isImageAsideLayout()) {
+    <section class="dynamic-form__aside-layout">
+      <aside class="dynamic-form__aside-media">
+        @for (field of imageAsideFields(); track field.key) {
+          <app-dynamic-field
+            [field]="field"
+            [form]="form()"
+          />
+        }
+      </aside>
+
+      <div class="dynamic-form__aside-fields">
+        @for (field of mainFields(); track field.key) {
+          <app-dynamic-field
+            [field]="field"
+            [form]="form()"
+          />
+        }
+      </div>
+    </section>
+  } @else {
+    <div
+      class="dynamic-form__grid"
+      [class.dynamic-form__grid--one]="(config().columns ?? 2) === 1"
+    >
+      @for (field of config().fields; track field.key) {
+        <app-dynamic-field
+          [field]="field"
+          [form]="form()"
+        />
+      }
+    </div>
+  }
+
+  @if (formValidationError(); as validationError) {
+    <p class="dynamic-form__form-error" role="alert">
+      {{ validationError }}
+    </p>
+  }
+
+  <div
+    class="dynamic-form__actions"
+    [class.dynamic-form__actions--stretch]="config().submitFullWidth ?? false"
+  >
+    @if (config().showCancel ?? true) {
+      <button
+        mat-button
+        type="button"
+        [disabled]="saving()"
+        (click)="cancelled.emit()"
+      >
+        {{ config().cancelLabel ?? 'Cancelar' }}
+      </button>
+    }
+
+    <app-submit-button
+      type="submit"
+      [label]="config().submitLabel ?? 'Guardar'"
+      [loadingLabel]="config().submitLoadingLabel ?? 'Guardando...'"
+      [icon]="config().submitIcon ?? null"
+      [loading]="saving()"
+      [disabled]="submitDisabled()"
+      [fullWidth]="config().submitFullWidth ?? false"
+    />
+  </div>
+</form>

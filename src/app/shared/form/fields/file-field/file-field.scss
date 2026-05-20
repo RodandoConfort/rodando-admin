@@ -1,0 +1,55 @@
+.file-field {
+  display: grid;
+  gap: 8px;
+}
+
+.file-field__label {
+  color: #334155;
+  font-weight: 600;
+}
+
+.file-field__dropzone {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 24px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  background: #fff;
+  text-align: center;
+}
+
+.file-field__icon {
+  color: #64748b;
+}
+
+.file-field__placeholder,
+.file-field__name,
+.file-field__hint,
+.file-field__error {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.file-field__placeholder,
+.file-field__hint {
+  color: #64748b;
+}
+
+.file-field__name {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.file-field__error {
+  color: #b91c1c;
+}
+
+.file-field__input {
+  display: none;
+}
+
+.file-field__actions {
+  display: flex;
+  gap: 8px;
+}

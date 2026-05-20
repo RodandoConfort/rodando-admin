@@ -1,0 +1,437 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.entity-page-card {
+  width: 100%;
+}
+
+.entity-page-card__surface {
+  overflow: hidden;
+  background: color-mix(in srgb, var(--app-surface) 94%, transparent);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  box-shadow:
+    var(--shadow-sm),
+    0 18px 60px rgb(15 23 42 / 6%);
+}
+
+.entity-page-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem 1.75rem;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--app-primary-soft) 55%, transparent),
+      transparent 48%
+    ),
+    var(--app-surface);
+}
+
+.entity-page-card__heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.entity-page-card__icon {
+  display: grid;
+  flex: 0 0 3rem;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  color: var(--app-white);
+  background: linear-gradient(
+    135deg,
+    var(--app-primary-600),
+    var(--app-primary-800)
+  );
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px rgb(185 28 28 / 22%);
+
+  mat-icon {
+    width: 1.45rem;
+    height: 1.45rem;
+    font-size: 1.45rem;
+  }
+}
+
+.entity-page-card__titles {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+
+  h1 {
+    margin: 0;
+    color: var(--app-text);
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    font-weight: 950;
+    line-height: 1.1;
+    letter-spacing: -0.045em;
+  }
+
+  p {
+    margin: 0;
+    max-width: 48rem;
+    color: var(--app-text-muted);
+    font-size: 0.95rem;
+    font-weight: 560;
+    line-height: 1.55;
+  }
+}
+
+.entity-page-card__header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.entity-page-card__content {
+  padding: 1.75rem;
+  background: var(--app-surface);
+}
+
+.entity-page-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  padding: 1.25rem 1.75rem;
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 76%,
+    var(--app-surface)
+  );
+}
+
+/* =========================================================
+   ACCIONES NORMALES: MISMO TAMAÑO SIEMPRE
+========================================================= */
+
+.entity-page-card__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+
+  width: var(--entity-card-action-width, 11.75rem);
+  min-width: var(--entity-card-action-width, 11.75rem);
+  height: var(--entity-card-action-height, 3.25rem);
+  min-height: var(--entity-card-action-height, 3.25rem);
+
+  padding-inline: 1rem;
+  border-radius: var(--entity-card-action-radius, 1rem) !important;
+
+  font-size: 0.9rem;
+  font-weight: 850;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    opacity var(--transition-fast);
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  mat-icon {
+    flex: 0 0 auto;
+    width: 1.15rem;
+    height: 1.15rem;
+    font-size: 1.15rem;
+  }
+
+  mat-spinner {
+    flex: 0 0 auto;
+    --mdc-circular-progress-active-indicator-color: currentColor;
+    --mat-progress-spinner-active-indicator-color: currentColor;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.72;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}
+
+/* =========================================================
+   FILLED
+========================================================= */
+
+.entity-page-card__action--filled.entity-page-card__action--primary {
+  color: var(--app-white) !important;
+  background: linear-gradient(
+    135deg,
+    var(--app-primary-600),
+    var(--app-primary-800)
+  ) !important;
+  box-shadow: 0 14px 30px rgb(185 28 28 / 26%);
+
+  --mdc-filled-button-label-text-color: var(--app-white);
+  --mdc-filled-button-container-color: var(--app-primary);
+  --mat-filled-button-state-layer-color: var(--app-white);
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 18px 36px rgb(185 28 28 / 34%);
+  }
+
+  mat-spinner {
+    --mdc-circular-progress-active-indicator-color: var(--app-white);
+    --mat-progress-spinner-active-indicator-color: var(--app-white);
+  }
+}
+
+.entity-page-card__action--filled.entity-page-card__action--neutral {
+  color: var(--app-text) !important;
+  background: var(--app-surface-3) !important;
+  border: 1px solid var(--app-border);
+  box-shadow: none;
+
+  --mdc-filled-button-label-text-color: var(--app-text);
+  --mdc-filled-button-container-color: var(--app-surface-3);
+  --mat-filled-button-state-layer-color: var(--app-text-muted);
+}
+
+.entity-page-card__action--filled.entity-page-card__action--danger {
+  color: var(--app-white) !important;
+  background: linear-gradient(
+    135deg,
+    #dc2626,
+    #991b1b
+  ) !important;
+  box-shadow: 0 14px 30px rgb(185 28 28 / 24%);
+
+  --mdc-filled-button-label-text-color: var(--app-white);
+  --mdc-filled-button-container-color: #dc2626;
+  --mat-filled-button-state-layer-color: var(--app-white);
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 18px 36px rgb(185 28 28 / 32%);
+  }
+}
+
+/* =========================================================
+   OUTLINED
+========================================================= */
+
+.entity-page-card__action--outlined.entity-page-card__action--primary {
+  color: var(--app-primary) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--app-primary) 48%,
+    var(--app-border)
+  ) !important;
+  background: color-mix(
+    in srgb,
+    var(--app-primary-soft) 34%,
+    transparent
+  );
+
+  --mdc-outlined-button-label-text-color: var(--app-primary);
+  --mdc-outlined-button-outline-color: color-mix(
+    in srgb,
+    var(--app-primary) 48%,
+    var(--app-border)
+  );
+  --mat-outlined-button-state-layer-color: var(--app-primary);
+}
+
+.entity-page-card__action--outlined.entity-page-card__action--neutral {
+  color: var(--app-text-muted) !important;
+  border-color: var(--app-border-strong) !important;
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 68%,
+    transparent
+  );
+
+  --mdc-outlined-button-label-text-color: var(--app-text-muted);
+  --mdc-outlined-button-outline-color: var(--app-border-strong);
+  --mat-outlined-button-state-layer-color: var(--app-text-muted);
+}
+
+.entity-page-card__action--outlined.entity-page-card__action--danger {
+  color: var(--app-danger) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--app-danger) 48%,
+    var(--app-border)
+  ) !important;
+  background: color-mix(
+    in srgb,
+    #fef2f2 44%,
+    transparent
+  );
+
+  --mdc-outlined-button-label-text-color: var(--app-danger);
+  --mdc-outlined-button-outline-color: color-mix(
+    in srgb,
+    var(--app-danger) 48%,
+    var(--app-border)
+  );
+  --mat-outlined-button-state-layer-color: var(--app-danger);
+}
+
+/* =========================================================
+   TEXT: VOLVER DEJA DE VERSE SUELTO
+========================================================= */
+
+.entity-page-card__action--text.entity-page-card__action--primary {
+  color: var(--app-primary) !important;
+  background: color-mix(
+    in srgb,
+    var(--app-primary-soft) 42%,
+    transparent
+  );
+  border: 1px solid color-mix(
+    in srgb,
+    var(--app-primary) 28%,
+    var(--app-border)
+  );
+
+  --mdc-text-button-label-text-color: var(--app-primary);
+  --mat-text-button-state-layer-color: var(--app-primary);
+}
+
+.entity-page-card__action--text.entity-page-card__action--neutral {
+  color: var(--app-text-muted) !important;
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 82%,
+    transparent
+  );
+  border: 1px solid var(--app-border);
+
+  --mdc-text-button-label-text-color: var(--app-text-muted);
+  --mat-text-button-state-layer-color: var(--app-text-muted);
+}
+
+.entity-page-card__action--text.entity-page-card__action--danger {
+  color: var(--app-danger) !important;
+  background: color-mix(
+    in srgb,
+    #fef2f2 52%,
+    transparent
+  );
+  border: 1px solid color-mix(
+    in srgb,
+    var(--app-danger) 28%,
+    var(--app-border)
+  );
+
+  --mdc-text-button-label-text-color: var(--app-danger);
+  --mat-text-button-state-layer-color: var(--app-danger);
+}
+
+/* =========================================================
+   ICON ACTIONS
+========================================================= */
+
+.entity-page-card__icon-action {
+  width: var(--entity-card-action-height, 3.25rem);
+  min-width: var(--entity-card-action-height, 3.25rem);
+  height: var(--entity-card-action-height, 3.25rem);
+  min-height: var(--entity-card-action-height, 3.25rem);
+
+  border-radius: var(--entity-card-action-radius, 1rem) !important;
+
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.entity-page-card__icon-action--primary {
+  color: var(--app-primary);
+  background: var(--app-primary-soft);
+}
+
+.entity-page-card__icon-action--neutral {
+  color: var(--app-text-muted);
+  background: var(--app-surface-2);
+}
+
+.entity-page-card__icon-action--danger {
+  color: var(--app-danger);
+  background: #fef2f2;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 860px) {
+  .entity-page-card__header {
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+
+  .entity-page-card__header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .entity-page-card__content {
+    padding: 1.25rem;
+  }
+
+  .entity-page-card__footer {
+    padding: 1rem 1.25rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .entity-page-card__heading {
+    gap: 0.85rem;
+  }
+
+  .entity-page-card__icon {
+    flex-basis: 2.7rem;
+    width: 2.7rem;
+    height: 2.7rem;
+  }
+
+  .entity-page-card__header-actions,
+  .entity-page-card__footer {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .entity-page-card__action {
+    width: 100%;
+    min-width: 100%;
+  }
+}

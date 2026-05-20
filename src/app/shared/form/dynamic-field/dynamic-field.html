@@ -1,0 +1,41 @@
+@switch (field().type) {
+  @case ('text') {
+    <app-text-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('email') {
+    <app-text-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('password') {
+    <app-text-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('number') {
+    <app-number-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('select') {
+    <app-select-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('checkbox') {
+    <app-checkbox-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('textarea') {
+    <app-textarea-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('date') {
+    <app-date-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('file') {
+    <app-file-field [field]="field()" [control]="control()" />
+  }
+
+  @case ('image') {
+    <app-image-field [field]="field()" [control]="control()" />
+  }
+}

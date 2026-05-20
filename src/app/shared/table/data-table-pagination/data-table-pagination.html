@@ -1,0 +1,11 @@
+<footer class="data-table-pagination">
+  <mat-paginator
+    [length]="config().length"
+    [pageIndex]="config().pageIndex"
+    [pageSize]="config().pageSize"
+    [pageSizeOptions]="config().pageSizeOptions ?? [10, 25, 50]"
+    [showFirstLastButtons]="config().showFirstLastButtons ?? true"
+    [hidePageSize]="config().hidePageSize ?? false"
+    (page)="emitPageChange($event)"
+  />
+</footer>

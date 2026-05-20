@@ -1,0 +1,57 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.page-loader {
+  display: grid;
+  width: 100%;
+  place-items: center;
+}
+
+.page-loader__surface {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  width: min(100%, 28rem);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at top center,
+      color-mix(in srgb, var(--app-primary-soft) 72%, transparent),
+      transparent 12rem
+    ),
+    color-mix(
+      in srgb,
+      var(--app-surface-2) 76%,
+      var(--app-surface)
+    );
+  border: 1px solid var(--app-border);
+  border-radius: 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+
+mat-spinner {
+  --mdc-circular-progress-active-indicator-color: var(--app-primary);
+  --mat-progress-spinner-active-indicator-color: var(--app-primary);
+}
+
+.page-loader__copy {
+  display: grid;
+  gap: 0.35rem;
+
+  strong {
+    color: var(--app-text);
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--app-text-muted);
+    font-size: 0.9rem;
+    font-weight: 650;
+    line-height: 1.5;
+  }}

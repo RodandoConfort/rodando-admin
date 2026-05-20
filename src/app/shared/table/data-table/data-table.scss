@@ -1,0 +1,404 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.data-table {
+  width: 100%;
+}
+
+.data-table__shell {
+  overflow: hidden;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.data-table__container {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--app-surface);
+}
+
+.data-table__table {
+  width: 100%;
+  min-width: 52rem;
+  background: transparent;
+}
+
+.data-table__header-cell {
+  height: 3.75rem;
+  padding-inline: 1rem;
+  color: var(--app-text-muted);
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 82%,
+    var(--app-surface)
+  );
+  border-bottom: 1px solid var(--app-border);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.data-table__cell {
+  height: 4.5rem;
+  padding-inline: 1rem;
+  color: var(--app-text);
+  border-bottom: 1px solid var(--app-border);
+  font-size: 0.9rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.data-table__cell--center {
+  text-align: center;
+}
+
+.data-table__cell--end {
+  text-align: end;
+}
+
+.data-table__row {
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+
+  &:hover {
+    background: color-mix(
+      in srgb,
+      var(--app-primary-soft) 34%,
+      var(--app-surface)
+    );
+  }
+
+  &:last-child .data-table__cell {
+    border-bottom: 0;
+  }
+}
+
+/* =========================================================
+   AVATAR / IMAGE
+========================================================= */
+
+.data-table__avatar {
+  display: inline-grid;
+  width: 2.65rem;
+  height: 2.65rem;
+  overflow: hidden;
+  place-items: center;
+  color: var(--app-primary);
+  font-size: 0.78rem;
+  font-weight: 950;
+  background: color-mix(
+    in srgb,
+    var(--app-primary-soft) 72%,
+    var(--app-surface-2)
+  );
+  border: 1px solid color-mix(
+    in srgb,
+    var(--app-primary) 30%,
+    var(--app-border)
+  );
+  border-radius: 999px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.data-table__image {
+  width: 3.25rem;
+  height: 3.25rem;
+  object-fit: cover;
+  border: 1px solid var(--app-border);
+  border-radius: 0.85rem;
+}
+
+/* =========================================================
+   BADGES
+   - success: azul
+   - warning: gris
+   - danger: rojo
+   - info: azul ligeramente más intenso
+   - neutral: gris suave
+========================================================= */
+
+.data-table__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.8rem;
+  padding: 0 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.data-table__badge--success {
+  color: #2563eb;
+  background: color-mix(
+    in srgb,
+    #dbeafe 86%,
+    var(--app-surface)
+  );
+  border-color: color-mix(
+    in srgb,
+    #2563eb 28%,
+    var(--app-border)
+  );
+}
+
+html[data-theme='dark'] .data-table__badge--success {
+  color: #93c5fd;
+  background: rgb(37 99 235 / 16%);
+  border-color: rgb(147 197 253 / 24%);
+}
+
+.data-table__badge--warning {
+  color: var(--app-text-muted);
+  background: color-mix(
+    in srgb,
+    var(--app-surface-3) 88%,
+    var(--app-surface)
+  );
+  border-color: var(--app-border-strong);
+}
+
+.data-table__badge--danger {
+  color: var(--app-danger);
+  background: color-mix(
+    in srgb,
+    var(--app-primary-soft) 84%,
+    var(--app-surface)
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--app-danger) 34%,
+    var(--app-border)
+  );
+}
+
+html[data-theme='dark'] .data-table__badge--danger {
+  color: #fca5a5;
+  background: rgb(220 38 38 / 16%);
+  border-color: rgb(248 113 113 / 28%);
+}
+
+.data-table__badge--info {
+  color: #1d4ed8;
+  background: color-mix(
+    in srgb,
+    #dbeafe 92%,
+    var(--app-surface)
+  );
+  border-color: color-mix(
+    in srgb,
+    #1d4ed8 32%,
+    var(--app-border)
+  );
+}
+
+html[data-theme='dark'] .data-table__badge--info {
+  color: #bfdbfe;
+  background: rgb(37 99 235 / 18%);
+  border-color: rgb(191 219 254 / 26%);
+}
+
+.data-table__badge--neutral {
+  color: var(--app-text-muted);
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 86%,
+    var(--app-surface)
+  );
+  border-color: var(--app-border);
+}
+
+/* =========================================================
+   BOOLEAN ICONS
+========================================================= */
+
+.data-table__boolean-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  font-size: 1.15rem;
+}
+
+.data-table__boolean-icon--true {
+  color: #3b82f6;
+}
+
+.data-table__boolean-icon--false {
+  color: var(--app-text-soft);
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.data-table__actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.data-table__action {
+  display: inline-grid;
+  width: 2.65rem;
+  min-width: 2.65rem;
+  height: 2.65rem;
+  min-height: 2.65rem;
+  place-items: center;
+
+  border: 1px solid transparent;
+  border-radius: 0.95rem !important;
+
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+
+  mat-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 1.25rem;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+/* Ver / neutro */
+.data-table__action--neutral {
+  color: var(--app-text-muted) !important;
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 88%,
+    var(--app-surface)
+  );
+  border-color: var(--app-border);
+
+  &:hover:not(:disabled) {
+    color: var(--app-text) !important;
+    background: var(--app-surface-3);
+    border-color: var(--app-border-strong);
+    box-shadow: 0 10px 22px rgb(15 23 42 / 10%);
+  }
+}
+
+/* Editar / primary */
+.data-table__action--primary {
+  color: var(--app-primary) !important;
+  background: color-mix(
+    in srgb,
+    var(--app-primary-soft) 74%,
+    var(--app-surface)
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--app-primary) 34%,
+    var(--app-border)
+  );
+
+  &:hover:not(:disabled) {
+    background: color-mix(
+      in srgb,
+      var(--app-primary-soft) 94%,
+      var(--app-surface)
+    );
+    border-color: color-mix(
+      in srgb,
+      var(--app-primary) 48%,
+      var(--app-border)
+    );
+    box-shadow: 0 12px 24px rgb(185 28 28 / 18%);
+  }
+}
+
+/* Eliminar / danger */
+.data-table__action--danger {
+  color: var(--app-danger) !important;
+  background: color-mix(
+    in srgb,
+    var(--app-primary-soft) 82%,
+    var(--app-surface)
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--app-danger) 36%,
+    var(--app-border)
+  );
+
+  &:hover:not(:disabled) {
+    background: color-mix(
+      in srgb,
+      var(--app-primary-soft) 98%,
+      var(--app-surface)
+    );
+    border-color: color-mix(
+      in srgb,
+      var(--app-danger) 52%,
+      var(--app-border)
+    );
+    box-shadow: 0 12px 24px rgb(185 28 28 / 18%);
+  }
+}
+
+html[data-theme='dark'] .data-table__action--primary,
+html[data-theme='dark'] .data-table__action--danger {
+  background: rgb(220 38 38 / 12%);
+}
+
+html[data-theme='dark'] .data-table__action--primary:hover:not(:disabled),
+html[data-theme='dark'] .data-table__action--danger:hover:not(:disabled) {
+  background: rgb(220 38 38 / 20%);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+  .data-table__shell {
+    border-radius: 1rem;
+  }
+
+  .data-table__header-cell,
+  .data-table__cell {
+    padding-inline: 0.85rem;
+  }
+
+  .data-table__actions {
+    gap: 0.4rem;
+  }
+
+  .data-table__action {
+    width: 2.45rem;
+    min-width: 2.45rem;
+    height: 2.45rem;
+    min-height: 2.45rem;
+  }
+}
