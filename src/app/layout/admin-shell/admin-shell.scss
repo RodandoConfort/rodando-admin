@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100dvh;
+}
+
+.admin-shell {
+  width: 100%;
+  height: 100dvh;
+  background: var(--app-bg);
+
+  --sidebar-current-width: var(--shell-sidebar-width);
+
+  &.is-collapsed {
+    --sidebar-current-width: var(--shell-sidebar-collapsed-width);
+  }
+}
+
+.admin-shell__sidenav {
+  width: var(--sidebar-current-width);
+  background: var(--app-surface);
+  border-right: 1px solid var(--app-border);
+  transition: width var(--transition-normal);
+}
+
+.admin-shell__content {
+  background:
+    radial-gradient(circle at top right, rgb(220 38 38 / 7%), transparent 28rem),
+    var(--app-bg);
+}
+
+.admin-shell__main {
+  min-height: calc(100dvh - var(--shell-topbar-height));
+  padding: var(--space-5);
+}
+
+.admin-shell__page {
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 960px) {
+  .admin-shell__sidenav {
+    width: min(20rem, 86vw);
+  }
+
+  .admin-shell__main {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-shell__main {
+    padding: var(--space-3);
+  }
+}

@@ -1,0 +1,48 @@
+<aside class="admin-sidebar" [class.is-collapsed]="collapsed()">
+  <a
+    class="admin-sidebar__brand"
+    [routerLink]="['/admin/dashboard']"
+    (click)="navigate.emit()"
+  >
+    <span class="admin-sidebar__brand-mark">R</span>
+
+    <span class="admin-sidebar__brand-text">
+      <strong>Rodando</strong>
+      <small>Admin Platform</small>
+    </span>
+  </a>
+
+  <nav class="admin-sidebar__nav" aria-label="Navegación principal">
+    <span class="admin-sidebar__section-title">Menú</span>
+
+    @for (item of items(); track item.label) {
+      <a
+        matRipple
+        class="admin-sidebar__item"
+        [routerLink]="item.route"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+        [matTooltip]="item.label"
+        [matTooltipDisabled]="!collapsed()"
+        matTooltipPosition="right"
+        (click)="navigate.emit()"
+      >
+        <span class="admin-sidebar__active-marker"></span>
+
+        <mat-icon class="admin-sidebar__item-icon">
+          {{ item.icon }}
+        </mat-icon>
+
+        <span class="admin-sidebar__item-label">
+          {{ item.label }}
+        </span>
+
+        @if (item.badge) {
+          <span class="admin-sidebar__badge">
+            {{ item.badge }}
+          </span>
+        }
+      </a>
+    }
+  </nav>
+</aside>

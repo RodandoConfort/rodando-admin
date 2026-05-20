@@ -1,0 +1,41 @@
+<mat-sidenav-container
+  autosize
+  class="admin-shell"
+  [class.is-collapsed]="collapsedForView()"
+  [class.is-mobile]="isMobile()"
+  [hasBackdrop]="isMobile()"
+  (backdropClick)="store.closeMobileSidebar()"
+>
+  <mat-sidenav
+    class="admin-shell__sidenav"
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="isMobile() ? store.mobileSidebarOpen() : true"
+    [fixedInViewport]="isMobile()"
+  >
+    <app-admin-sidebar
+      [items]="navItems"
+      [collapsed]="collapsedForView()"
+      (navigate)="onSidebarNavigate()"
+    />
+  </mat-sidenav>
+
+  <mat-sidenav-content class="admin-shell__content">
+    <app-admin-topbar
+      [title]="pageTitle()"
+      [isDark]="store.isDarkTheme()"
+      [loggingOut]="authStore.loggingOut()"
+      (toggleSidebar)="onSidebarToggle()"
+      (toggleTheme)="store.toggleTheme()"
+      (logoutRequested)="logout()"
+      (profileRequested)="goToProfile()"
+    />
+
+    <main class="admin-shell__main">
+      <app-admin-breadcrumbs [items]="breadcrumbs()" />
+
+      <section class="admin-shell__page">
+        <router-outlet />
+      </section>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

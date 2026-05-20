@@ -1,0 +1,120 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: block;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: var(--shell-topbar-height);
+  padding: 0 1.5rem;
+  color: var(--app-text);
+  background: color-mix(in srgb, var(--app-surface) 94%, transparent);
+  border-bottom: 1px solid var(--app-border);
+  backdrop-filter: blur(18px);
+}
+
+.admin-topbar__heading {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 12rem;
+  margin-right: 0.75rem;
+
+  h1 {
+    margin: 0;
+    color: var(--app-text);
+    font-size: 1.18rem;
+    font-weight: 850;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  span {
+    color: var(--app-text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+}
+
+.admin-topbar__search {
+  flex: 0 1 28rem;
+  width: 28rem;
+  max-width: 36vw;
+  margin-right: 0.75rem;
+
+  --mat-form-field-container-height: 2.75rem;
+  --mat-form-field-container-vertical-padding: 0.55rem;
+  --mat-form-field-outlined-container-shape: 0.85rem;
+  --mat-form-field-outlined-outline-color: var(--app-border);
+  --mat-form-field-outlined-hover-outline-color: var(--app-border-strong);
+  --mat-form-field-outlined-focus-outline-color: var(--app-primary);
+}
+
+.admin-topbar__spacer {
+  flex: 1 1 auto;
+}
+
+.admin-topbar__profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0 0.45rem 0 0.35rem;
+  color: var(--app-text);
+  border-radius: 999px;
+}
+
+.admin-topbar__avatar {
+  display: inline-grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  color: var(--app-white);
+  font-size: 0.78rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--app-primary-700), var(--app-black));
+  border-radius: 999px;
+}
+
+.admin-topbar__profile-text {
+  color: var(--app-text);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+@media (max-width: 1100px) {
+  .admin-topbar__search {
+    flex-basis: 20rem;
+    width: 20rem;
+    max-width: 32vw;
+  }
+}
+
+@media (max-width: 820px) {
+  .admin-topbar {
+    gap: 0.65rem;
+    padding-inline: 1rem;
+  }
+
+  .admin-topbar__heading {
+    min-width: 0;
+    margin-right: auto;
+  }
+
+  .admin-topbar__search {
+    display: none;
+  }
+
+  .admin-topbar__heading span,
+  .admin-topbar__profile-text {
+    display: none;
+  }
+}
+
+mat-menu button mat-spinner {
+  margin-right: 16px;
+}

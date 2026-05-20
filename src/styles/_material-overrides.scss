@@ -1,0 +1,212 @@
+.mat-mdc-button-base {
+  border-radius: var(--radius-md) !important;
+}
+
+.mat-mdc-icon-button {
+  color: var(--app-text-muted);
+}
+
+.mat-mdc-menu-panel {
+  background: var(--app-surface) !important;
+  color: var(--app-text) !important;
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* =========================
+   FORM FIELD GLOBAL
+========================= */
+
+.mat-mdc-form-field {
+  width: 100%;
+
+  --mat-form-field-container-height: var(--form-field-height);
+  --mat-form-field-container-vertical-padding: var(--form-field-padding-y);
+  --mat-form-field-outlined-container-shape: var(--form-field-radius);
+
+  --mat-form-field-outlined-outline-color: var(--app-border);
+  --mat-form-field-outlined-hover-outline-color: var(--app-border-strong);
+  --mat-form-field-outlined-focus-outline-color: var(--app-primary);
+
+  --mat-form-field-outlined-input-text-color: var(--app-text);
+  --mat-form-field-outlined-label-text-color: var(--app-text-muted);
+  --mat-form-field-outlined-focus-label-text-color: var(--app-primary);
+
+  --mdc-outlined-text-field-outline-color: var(--app-border);
+  --mdc-outlined-text-field-hover-outline-color: var(--app-border-strong);
+  --mdc-outlined-text-field-focus-outline-color: var(--app-primary);
+
+  --mdc-outlined-text-field-label-text-color: var(--app-text-muted);
+  --mdc-outlined-text-field-hover-label-text-color: var(--app-text-muted);
+  --mdc-outlined-text-field-focus-label-text-color: var(--app-primary);
+
+  --mdc-outlined-text-field-input-text-color: var(--app-text);
+  --mdc-outlined-text-field-caret-color: var(--app-primary);
+
+  --mdc-outlined-text-field-error-outline-color: var(--app-danger);
+  --mdc-outlined-text-field-error-hover-outline-color: var(--app-danger);
+  --mdc-outlined-text-field-error-focus-outline-color: var(--app-danger);
+
+  --mdc-outlined-text-field-error-label-text-color: var(--app-danger);
+  --mdc-outlined-text-field-error-hover-label-text-color: var(--app-danger);
+  --mdc-outlined-text-field-error-focus-label-text-color: var(--app-danger);
+
+  --mdc-outlined-text-field-error-caret-color: var(--app-danger);
+}
+
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field textarea.mat-mdc-input-element,
+.mat-mdc-select-value,
+.mat-mdc-select-value-text,
+.mat-mdc-select-min-line {
+  color: var(--app-text) !important;
+  -webkit-text-fill-color: var(--app-text) !important;
+}
+
+.mat-mdc-form-field .mat-mdc-input-element {
+  color: var(--app-text) !important;
+  caret-color: var(--app-primary);
+  -webkit-text-fill-color: var(--app-text);
+}
+
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-input-element {
+  caret-color: var(--app-danger);
+}
+
+/* Evita inputs con texto oscuro por autofill del navegador */
+.mat-mdc-input-element:-webkit-autofill,
+.mat-mdc-input-element:-webkit-autofill:hover,
+.mat-mdc-input-element:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--app-text) !important;
+  box-shadow: 0 0 0 1000px var(--app-surface) inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* =========================
+   MAT SELECT GLOBAL
+========================= */
+
+.mat-mdc-select-value,
+.mat-mdc-select-value-text,
+.mat-mdc-select-min-line {
+  color: var(--app-text) !important;
+  font-weight: 700;
+}
+
+.mat-mdc-select-placeholder {
+  color: var(--app-text-muted) !important;
+}
+
+.mat-mdc-select-arrow {
+  color: var(--app-text-muted) !important;
+}
+
+.cdk-overlay-pane .mat-mdc-select-panel {
+  background: var(--app-surface) !important;
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding-block: 0.35rem;
+}
+
+.cdk-overlay-pane .mat-mdc-option {
+  color: var(--app-text) !important;
+  min-height: 2.75rem;
+}
+
+.cdk-overlay-pane .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background: var(--app-surface-2) !important;
+}
+
+.cdk-overlay-pane .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  color: var(--app-primary) !important;
+  background: var(--app-primary-soft) !important;
+}
+
+/* =========================
+   BOTONES SIN AZUL
+========================= */
+
+.mat-mdc-button:not(:disabled) {
+  color: var(--app-text-muted) !important;
+
+  --mdc-text-button-label-text-color: var(--app-text-muted);
+  --mat-text-button-state-layer-color: var(--app-text-muted);
+}
+
+.mat-mdc-outlined-button:not(:disabled) {
+  color: var(--app-primary) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--app-primary) 42%,
+    var(--app-border)
+  ) !important;
+
+  --mdc-outlined-button-label-text-color: var(--app-primary);
+  --mdc-outlined-button-outline-color: color-mix(
+    in srgb,
+    var(--app-primary) 42%,
+    var(--app-border)
+  );
+  --mat-outlined-button-state-layer-color: var(--app-primary);
+}
+
+.mat-mdc-unelevated-button:not(:disabled) {
+  color: var(--app-white) !important;
+  background: linear-gradient(
+    135deg,
+    var(--app-primary-600),
+    var(--app-primary-800)
+  ) !important;
+
+  --mdc-filled-button-label-text-color: var(--app-white);
+  --mdc-filled-button-container-color: var(--app-primary);
+  --mat-filled-button-state-layer-color: var(--app-white);
+}
+
+.mat-mdc-unelevated-button:disabled {
+  color: var(--app-text-soft) !important;
+  background: var(--app-surface-3) !important;
+}
+
+/* =========================
+   TOOLTIP
+========================= */
+
+.mat-mdc-tooltip {
+  font-size: 0.75rem;
+}
+
+/* =========================
+   SNACKBARS
+========================= */
+
+.app-snackbar {
+  --mdc-snackbar-container-shape: 12px;
+  --mdc-snackbar-supporting-text-weight: 600;
+}
+
+.app-snackbar--success {
+  --mdc-snackbar-container-color: #dcfce7;
+  --mdc-snackbar-supporting-text-color: #166534;
+  --mat-snack-bar-button-color: #166534;
+}
+
+.app-snackbar--error {
+  --mdc-snackbar-container-color: #fee2e2;
+  --mdc-snackbar-supporting-text-color: #991b1b;
+  --mat-snack-bar-button-color: #991b1b;
+}
+
+.app-snackbar--warning {
+  --mdc-snackbar-container-color: #fef3c7;
+  --mdc-snackbar-supporting-text-color: #92400e;
+  --mat-snack-bar-button-color: #92400e;
+}
+
+.app-snackbar--info {
+  --mdc-snackbar-container-color: #e2e8f0;
+  --mdc-snackbar-supporting-text-color: #334155;
+  --mat-snack-bar-button-color: #334155;
+}

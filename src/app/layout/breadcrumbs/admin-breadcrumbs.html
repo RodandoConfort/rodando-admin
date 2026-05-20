@@ -1,0 +1,18 @@
+<nav class="admin-breadcrumbs" aria-label="Breadcrumb">
+  <a class="admin-breadcrumbs__home" routerLink="/admin/dashboard">
+    <mat-icon>home</mat-icon>
+    <span>Inicio</span>
+  </a>
+
+  @for (item of items(); track item.url; let last = $last) {
+    <mat-icon class="admin-breadcrumbs__separator">chevron_right</mat-icon>
+
+    @if (last) {
+      <span class="admin-breadcrumbs__current">{{ item.label }}</span>
+    } @else {
+      <a class="admin-breadcrumbs__link" [routerLink]="item.url">
+        {{ item.label }}
+      </a>
+    }
+  }
+</nav>

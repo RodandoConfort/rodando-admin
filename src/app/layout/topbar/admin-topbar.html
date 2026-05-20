@@ -1,0 +1,77 @@
+<mat-toolbar class="admin-topbar">
+  <button
+    mat-icon-button
+    type="button"
+    aria-label="Alternar menú"
+    matTooltip="Menú"
+    (click)="toggleSidebar.emit()"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="admin-topbar__heading">
+    <h1>{{ title() }}</h1>
+    <span>Gestión administrativa</span>
+  </div>
+
+  <span class="admin-topbar__spacer"></span>
+
+  <button
+    mat-icon-button
+    type="button"
+    aria-label="Cambiar tema"
+    matTooltip="Cambiar tema"
+    (click)="toggleTheme.emit()"
+  >
+    <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    type="button"
+    aria-label="Notificaciones"
+    matTooltip="Notificaciones"
+  >
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <button
+    mat-button
+    type="button"
+    class="admin-topbar__profile"
+    [matMenuTriggerFor]="profileMenu"
+  >
+    <span class="admin-topbar__avatar">AD</span>
+    <span class="admin-topbar__profile-text">Admin</span>
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+
+  <mat-menu #profileMenu="matMenu">
+    <button mat-menu-item type="button" (click)="profileRequested.emit()">
+      <mat-icon>person</mat-icon>
+      <span>Perfil</span>
+    </button>
+
+    <button mat-menu-item type="button">
+      <mat-icon>settings</mat-icon>
+      <span>Preferencias</span>
+    </button>
+
+    <button
+  mat-menu-item
+  type="button"
+  [disabled]="loggingOut()"
+  (click)="logoutRequested.emit()"
+>
+  @if (loggingOut()) {
+    <mat-spinner diameter="18" />
+  } @else {
+    <mat-icon>logout</mat-icon>
+  }
+
+  <span>
+    {{ loggingOut() ? 'Cerrando sesión...' : 'Cerrar sesión' }}
+  </span>
+</button>
+  </mat-menu>
+</mat-toolbar>

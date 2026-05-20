@@ -1,0 +1,94 @@
+:root,
+html[data-theme='light'] {
+  color-scheme: light;
+
+  --app-primary-50: #fef2f2;
+  --app-primary-100: #fee2e2;
+  --app-primary-200: #fecaca;
+  --app-primary-500: #ef4444;
+  --app-primary-600: #dc2626;
+  --app-primary-700: #b91c1c;
+  --app-primary-800: #991b1b;
+
+  --app-primary: var(--app-primary-600);
+  --app-primary-hover: var(--app-primary-700);
+  --app-primary-soft: #fff1f2;
+
+  --app-bg: #f6f7fb;
+  --app-surface: #ffffff;
+  --app-surface-2: #f9fafb;
+  --app-surface-3: #f3f4f6;
+
+  --app-text: #111827;
+  --app-text-muted: #64748b;
+  --app-text-soft: #94a3b8;
+
+  --app-border: #e5e7eb;
+  --app-border-strong: #d1d5db;
+
+  --app-black: #020617;
+  --app-white: #ffffff;
+
+  --app-success: #16a34a;
+  --app-warning: #f59e0b;
+  --app-danger: #dc2626;
+  --app-info: #2563eb;
+
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 6%);
+  --shadow-md: 0 8px 24px rgb(15 23 42 / 8%);
+  --shadow-lg: 0 20px 45px rgb(15 23 42 / 12%);
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+
+  --shell-sidebar-width: 17.5rem;
+  --shell-sidebar-collapsed-width: 5.25rem;
+  --shell-topbar-height: 4.5rem;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --transition-fast: 140ms ease;
+  --transition-normal: 220ms ease;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+
+  --app-primary-soft: rgb(220 38 38 / 14%);
+
+  --app-bg: #080a0f;
+  --app-surface: #10131a;
+  --app-surface-2: #151924;
+  --app-surface-3: #1f2430;
+
+  --app-text: #f8fafc;
+  --app-text-muted: #a1aab8;
+  --app-text-soft: #727b8d;
+
+  --app-border: #252b38;
+  --app-border-strong: #374151;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 20%);
+  --shadow-md: 0 12px 28px rgb(0 0 0 / 28%);
+  --shadow-lg: 0 24px 60px rgb(0 0 0 / 38%);
+
+   --form-field-height: 4rem;
+  --form-field-padding-y: 0.85rem;
+  --form-field-radius: 0.35rem;
+
+  --entity-page-action-width: 11.5rem;
+  --dynamic-form-action-width: 14.5rem;
+
+  --entity-card-action-width: 11.75rem;
+--entity-card-action-height: 3.25rem;
+--entity-card-action-radius: 1rem;
+}
