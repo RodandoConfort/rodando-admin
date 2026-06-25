@@ -1,0 +1,145 @@
+:host {
+  display: block;
+}
+
+.driver-create-page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.driver-create-page__stepper {
+  background: transparent;
+}
+
+.driver-create-page__step-content {
+  display: grid;
+  gap: 1.5rem;
+  padding-top: 1rem;
+}
+
+.driver-create-page__step-copy {
+  display: grid;
+  gap: 0.35rem;
+
+  h3 {
+    margin: 0;
+    color: var(--app-text);
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--app-text-muted);
+    font-size: 0.95rem;
+    font-weight: 560;
+    line-height: 1.55;
+  }
+}
+
+.driver-create-page__secondary-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.driver-create-page__summary {
+  display: grid;
+  gap: 1rem;
+}
+
+.driver-create-page__summary-card {
+  overflow: hidden;
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 76%,
+    var(--app-surface)
+  );
+  border: 1px solid var(--app-border);
+  border-radius: 1rem;
+}
+
+.driver-create-page__summary-header {
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid var(--app-border);
+
+  h4 {
+    margin: 0;
+    color: var(--app-text);
+    font-size: 1rem;
+    font-weight: 850;
+  }
+}
+
+.driver-create-page__summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem 1.15rem 1.15rem;
+}
+
+.driver-create-page__summary-item {
+  display: grid;
+  gap: 0.35rem;
+
+  span {
+    color: var(--app-text-muted);
+    font-size: 0.78rem;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  strong {
+    color: var(--app-text);
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.45;
+  }
+}
+
+.driver-create-page__confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.driver-create-page__finish-button {
+  min-width: 14rem;
+}
+
+::ng-deep .driver-create-page__stepper .mat-step-header {
+  border-radius: 1rem;
+}
+
+::ng-deep .driver-create-page__stepper .mat-step-label {
+  font-weight: 800;
+}
+
+::ng-deep .driver-create-page__stepper .mat-step-icon {
+  background: var(--app-surface-3);
+  color: var(--app-text-muted);
+}
+
+::ng-deep .driver-create-page__stepper .mat-step-icon-selected,
+::ng-deep .driver-create-page__stepper .mat-step-icon-state-edit,
+::ng-deep .driver-create-page__stepper .mat-step-icon-state-done {
+  background: var(--app-primary);
+  color: var(--app-white);
+}
+
+@media (max-width: 900px) {
+  .driver-create-page__summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .driver-create-page__confirmation-actions {
+    justify-content: stretch;
+  }
+
+  .driver-create-page__confirmation-actions button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,180 @@
+<app-entity-page-card
+  title="Onboarding de conductor"
+  subtitle="Completa los pasos para registrar un nuevo conductor y su vehículo inicial."
+  icon="directions_car"
+  [actions]="cardActions()"
+  (actionClick)="onCardAction($event)"
+>
+  <section class="driver-create-page">
+    <mat-stepper
+      class="driver-create-page__stepper"
+      [selectedIndex]="store.currentStepIndex()"
+      (selectedIndexChange)="onStepChange($event)"
+    >
+      <mat-step [completed]="!!store.createdUser()">
+        <ng-template matStepLabel>Datos de usuario</ng-template>
+
+        <div class="driver-create-page__step-content">
+          <div class="driver-create-page__step-copy">
+            <h3>Crear usuario conductor</h3>
+            <p>
+              Este primer paso crea el usuario base que luego se asociará al
+              perfil del conductor.
+            </p>
+          </div>
+
+          <app-dynamic-form
+            [config]="userFormConfig"
+            [initialValue]="store.userDraft()"
+            [saving]="store.savingUser()"
+            [error]="store.onboardingError()"
+            (submitted)="submitUserStep($event)"
+          />
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="!!store.driverProfileDraft()">
+        <ng-template matStepLabel>Perfil del conductor</ng-template>
+
+        <div class="driver-create-page__step-content">
+          <div class="driver-create-page__step-copy">
+            <h3>Datos profesionales del conductor</h3>
+            <p>
+              Registra la licencia, estado interno, verificación y contacto de
+              emergencia.
+            </p>
+          </div>
+
+          <app-dynamic-form
+            [config]="driverProfileFormConfig"
+            [initialValue]="store.driverProfileDraft()"
+            (submitted)="submitDriverProfileStep($event)"
+          />
+
+          <div class="driver-create-page__secondary-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="goPreviousStep()"
+            >
+              <mat-icon>arrow_back</mat-icon>
+              Volver al usuario
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="!!store.vehicleDraft()">
+        <ng-template matStepLabel>Vehículo</ng-template>
+
+        <div class="driver-create-page__step-content">
+          <div class="driver-create-page__step-copy">
+            <h3>Vehículo inicial</h3>
+            <p>
+              Completa los datos del vehículo que quedará asociado en el
+              onboarding.
+            </p>
+          </div>
+
+          <app-dynamic-form
+            [config]="vehicleFormConfig()"
+            [initialValue]="store.vehicleDraft()"
+            [error]="store.catalogsError()"
+            (submitted)="submitVehicleStep($event)"
+          />
+
+          <div class="driver-create-page__secondary-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="goPreviousStep()"
+            >
+              <mat-icon>arrow_back</mat-icon>
+              Volver al perfil
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Confirmación</ng-template>
+
+        <div class="driver-create-page__step-content">
+          <div class="driver-create-page__step-copy">
+            <h3>Confirmación final</h3>
+            <p>
+              Revisa toda la información antes de confirmar el onboarding real
+              del conductor.
+            </p>
+          </div>
+
+          @if (store.onboardingError(); as onboardingError) {
+            <div class="driver-create-page__error" role="alert">
+              {{ onboardingError }}
+            </div>
+          }
+
+          <div class="driver-create-page__summary">
+            @for (section of confirmationSections(); track section.title) {
+              <article class="driver-create-page__summary-card">
+                <header class="driver-create-page__summary-header">
+                  <h4>{{ section.title }}</h4>
+                </header>
+
+                <div class="driver-create-page__summary-grid">
+                  @for (item of section.items; track item.label) {
+                    <div class="driver-create-page__summary-item">
+                      <span>{{ item.label }}</span>
+                      <strong>{{ item.value }}</strong>
+                    </div>
+                  }
+                </div>
+              </article>
+            }
+          </div>
+
+          <div class="driver-create-page__confirmation-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="goToStep(0)"
+            >
+              Editar usuario
+            </button>
+
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="goToStep(1)"
+            >
+              Editar conductor
+            </button>
+
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="goToStep(2)"
+            >
+              Editar vehículo
+            </button>
+
+            <button
+              mat-flat-button
+              type="button"
+              class="driver-create-page__finish-button"
+              [disabled]="!store.canFinishOnboarding() || store.savingOnboarding()"
+              (click)="finishOnboarding()"
+            >
+              <mat-icon>task_alt</mat-icon>
+              {{
+                store.savingOnboarding()
+                  ? 'Confirmando...'
+                  : 'Confirmar onboarding'
+              }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </section>
+</app-entity-page-card>
