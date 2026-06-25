@@ -1,0 +1,232 @@
+<app-entity-page-card
+  title="Detalle del viaje"
+  subtitle="Revisión operativa del viaje, timeline y acciones administrativas."
+  icon="route"
+  [actions]="cardActions()"
+  (actionClick)="onCardAction($event)"
+>
+  @if (store.detailLoading()) {
+    <app-page-loader
+      title="Cargando viaje..."
+      description="Estamos obteniendo el estado actualizado del viaje."
+    />
+  } @else if (store.detailError(); as detailError) {
+    <div class="admin-trip-detail__error" role="alert">
+      {{ detailError }}
+    </div>
+  } @else if (store.selectedTrip(); as trip) {
+    <section class="admin-trip-detail__layout">
+      <div class="admin-trip-detail__main">
+        <section class="admin-trip-detail__hero">
+          <div>
+            <span class="admin-trip-detail__eyebrow">Viaje</span>
+
+            <h2>
+              {{ trip.pickupAddress ?? 'Viaje sin dirección registrada' }}
+            </h2>
+
+            <p>
+              Solicitado el
+              <strong>{{ trip.requestedAt | date: 'dd/MM/yyyy HH:mm' }}</strong>
+            </p>
+          </div>
+
+          <span
+            class="admin-trip-detail__status"
+            [class.admin-trip-detail__status--warning]="isWarningStatus(trip.currentStatus)"
+            [class.admin-trip-detail__status--success]="isSuccessStatus(trip.currentStatus)"
+            [class.admin-trip-detail__status--danger]="isDangerStatus(trip.currentStatus)"
+            [class.admin-trip-detail__status--info]="isInfoStatus(trip.currentStatus)"
+          >
+            {{ statusLabel(trip.currentStatus) }}
+          </span>
+        </section>
+
+        @if (tripWarning(); as warning) {
+          <section
+            class="admin-trip-detail__warning"
+            [class.admin-trip-detail__warning--danger]="warning.tone === 'danger'"
+          >
+            <mat-icon>
+              {{ warning.tone === 'danger' ? 'report_problem' : 'warning' }}
+            </mat-icon>
+
+            <div>
+              <strong>{{ warning.label }}</strong>
+              <p>{{ warning.description }}</p>
+            </div>
+          </section>
+        }
+
+        <section class="admin-trip-detail__cards">
+          <article class="admin-trip-detail__metric-card">
+            <span>Tarifa estimada</span>
+            <strong>
+              {{ moneyLabel(trip.fareEstimatedTotal, trip.fareFinalCurrency) }}
+            </strong>
+          </article>
+
+          <article class="admin-trip-detail__metric-card">
+            <span>Método de pago</span>
+            <strong>{{ paymentModeLabel(trip.paymentMode) }}</strong>
+          </article>
+
+          <article class="admin-trip-detail__metric-card">
+            <span>Paradas</span>
+            <strong>{{ stopsCount(trip) }}</strong>
+          </article>
+        </section>
+
+        <section class="admin-trip-detail__section">
+          <header>
+            <mat-icon>groups</mat-icon>
+
+            <div>
+              <h3>Participantes</h3>
+              <p>Pasajero, driver y vehículo asociado al viaje.</p>
+            </div>
+          </header>
+
+          <div class="admin-trip-detail__info-grid">
+            <div class="admin-trip-detail__info-item">
+              <span>Pasajero</span>
+              <strong>{{ trip.passengerName ?? trip.passengerId }}</strong>
+
+              @if (trip.passengerPhone) {
+                <small>{{ trip.passengerPhone }}</small>
+              }
+            </div>
+
+            <div class="admin-trip-detail__info-item">
+              <span>Driver</span>
+              <strong>{{ trip.driverName ?? 'Sin asignar' }}</strong>
+
+              @if (trip.driverPhone) {
+                <small>{{ trip.driverPhone }}</small>
+              }
+            </div>
+
+            <div class="admin-trip-detail__info-item">
+              <span>Vehículo</span>
+              <strong>{{ vehicleLabel(trip) }}</strong>
+
+              @if (trip.vehiclePlateNumber) {
+                <small>Placa {{ trip.vehiclePlateNumber }}</small>
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-trip-detail__section">
+          <header>
+            <mat-icon>map</mat-icon>
+
+            <div>
+              <h3>Ruta y tiempos</h3>
+              <p>Origen, fechas operativas y avance del viaje.</p>
+            </div>
+          </header>
+
+          <div class="admin-trip-detail__info-grid">
+            <div class="admin-trip-detail__info-item admin-trip-detail__info-item--wide">
+              <span>Origen</span>
+              <strong>{{ trip.pickupAddress ?? 'Sin dirección' }}</strong>
+            </div>
+
+            @if (hasDestination(trip)) {
+              <div class="admin-trip-detail__info-item admin-trip-detail__info-item--wide">
+                <span>Destino</span>
+                <strong>{{ destinationLabel(trip) }}</strong>
+              </div>
+            }
+
+            <div class="admin-trip-detail__info-item">
+              <span>Solicitado</span>
+              <strong>{{ trip.requestedAt | date: 'dd/MM/yyyy HH:mm' }}</strong>
+            </div>
+
+            <div class="admin-trip-detail__info-item">
+              <span>Aceptado</span>
+              <strong>
+                {{ trip.acceptedAt ? (trip.acceptedAt | date: 'dd/MM/yyyy HH:mm') : '—' }}
+              </strong>
+            </div>
+
+            <div class="admin-trip-detail__info-item">
+              <span>Iniciado</span>
+              <strong>
+                {{ trip.startedAt ? (trip.startedAt | date: 'dd/MM/yyyy HH:mm') : '—' }}
+              </strong>
+            </div>
+
+            <div class="admin-trip-detail__info-item">
+              <span>Completado</span>
+              <strong>
+                {{ trip.completedAt ? (trip.completedAt | date: 'dd/MM/yyyy HH:mm') : '—' }}
+              </strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-trip-detail__timeline">
+          <header>
+            <div>
+              <h3>Timeline</h3>
+              <p>Eventos auditables registrados para este viaje.</p>
+            </div>
+
+            <button mat-stroked-button type="button" (click)="reloadTimeline()">
+              <mat-icon>refresh</mat-icon>
+              Actualizar
+            </button>
+          </header>
+
+          @if (store.eventsLoading()) {
+            <p class="admin-trip-detail__muted">Cargando eventos...</p>
+          } @else if (store.eventsError(); as eventsError) {
+            <div class="admin-trip-detail__error" role="alert">
+              {{ eventsError }}
+            </div>
+          } @else if (store.events().length === 0) {
+            <p class="admin-trip-detail__muted">Este viaje todavía no tiene eventos registrados.</p>
+          } @else {
+            <ol>
+              @for (event of store.events(); track event.id) {
+                <li>
+                  <div class="admin-trip-detail__timeline-dot"></div>
+
+                  <div class="admin-trip-detail__timeline-content">
+                    <strong>{{ eventLabel(event.eventType) }}</strong>
+
+                    <span>
+                      {{ event.occurredAt | date: 'dd/MM/yyyy HH:mm:ss' }}
+                    </span>
+
+                    @if (event.metadata) {
+                      <details>
+                        <summary>Ver metadata</summary>
+                        <pre>{{ event.metadata | json }}</pre>
+                      </details>
+                    }
+                  </div>
+                </li>
+              }
+            </ol>
+          }
+        </section>
+      </div>
+
+      <aside class="admin-trip-detail__aside">
+        <app-admin-trip-actions-panel
+          [trip]="trip"
+          [actionLoading]="store.actionLoading()"
+          [actionError]="store.actionError()"
+          [actionSuccess]="store.actionSuccess()"
+          (overrideStatus)="handleOverrideStatus(trip.id, $event)"
+          (cancelTrip)="store.cancelTrip(trip.id, $event)"
+          (sendMessage)="handleSendMessage(trip.id, $event)"
+        />
+      </aside>
+    </section>
+  }
+</app-entity-page-card>
