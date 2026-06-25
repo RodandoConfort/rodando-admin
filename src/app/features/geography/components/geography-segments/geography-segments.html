@@ -1,0 +1,21 @@
+<nav class="geography-segments" aria-label="Secciones de geografía">
+  <a
+    class="geography-segments__item"
+    [routerLink]="routes.geographyCities"
+    routerLinkActive="geography-segments__item--active"
+    [routerLinkActiveOptions]="{ exact: false }"
+  >
+    <mat-icon>location_city</mat-icon>
+    <span>Ciudades</span>
+  </a>
+
+  <a
+    class="geography-segments__item"
+    [routerLink]="routes.geographyZones"
+    routerLinkActive="geography-segments__item--active"
+    [routerLinkActiveOptions]="{ exact: false }"
+  >
+    <mat-icon>map</mat-icon>
+    <span>Zonas</span>
+  </a>
+</nav>
