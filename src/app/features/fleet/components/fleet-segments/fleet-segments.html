@@ -1,0 +1,12 @@
+<nav class="fleet-segments" aria-label="Secciones de catálogos de flota">
+  @for (segment of segments; track segment.label) {
+    <a
+      class="fleet-segments__item"
+      [routerLink]="segment.route"
+      routerLinkActive="fleet-segments__item--active"
+    >
+      <mat-icon>{{ segment.icon }}</mat-icon>
+      <span>{{ segment.label }}</span>
+    </a>
+  }
+</nav>
