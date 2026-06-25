@@ -26,8 +26,42 @@ export const ADMIN_NAVIGATION: AdminNavigationItem[] = [
   },
   {
     label: 'Conductores',
-    icon: 'local_shipping',
+    icon: 'directions_car',
     route: ROUTE_COMMANDS.admin.drivers,
     permission: 'drivers.read',
+  },
+  {
+    label: 'Control de Flota',
+    icon: 'local_shipping',
+    route: ROUTE_COMMANDS.admin.fleet,
+    // permission: 'drivers.read',
+  },
+  {
+    label: 'Viajes',
+    icon: 'route',
+    route: ROUTE_COMMANDS.admin.trips,
+  },
+  {
+    label: 'Geografía',
+    icon: 'public',
+    route: ROUTE_COMMANDS.admin.geography,
+    exact: false,
+  },
+  {
+    label: 'Puntos de Recaudo',
+    icon: 'route',
+    route: ROUTE_COMMANDS.admin.cashCollectionPoints,
+  },
+  {
+    label: 'Configuración',
+    icon: 'tune',
+    route: ROUTE_COMMANDS.admin.systemSettings,
+    exact: false,
+  },
+  {
+    label: 'Políticas de precio',
+    icon: 'payments',
+    route: ROUTE_COMMANDS.admin.pricePolicies,
+    exact: false,
   },
 ];
