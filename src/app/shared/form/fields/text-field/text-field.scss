@@ -1,5 +1,6 @@
 :host {
   display: block;
+  width: 100%;
 }
 
 .text-field {
@@ -18,13 +19,15 @@
   color: var(--app-text-muted);
 }
 
-.text-field input {
+.text-field input,
+.text-field textarea {
   color: var(--app-text) !important;
   -webkit-text-fill-color: var(--app-text) !important;
   font-weight: 700;
 }
 
-.text-field input::placeholder {
+.text-field input::placeholder,
+.text-field textarea::placeholder {
   color: var(--app-text-muted);
   font-weight: 500;
 }
@@ -38,4 +41,26 @@
   font-size: 1rem;
   font-weight: 850;
   padding-right: 0.55rem;
+}
+
+/* Textarea real */
+.text-field--textarea {
+  --mat-form-field-container-height: auto;
+  --mat-form-field-container-vertical-padding: 0.85rem;
+}
+
+.text-field__textarea {
+  min-height: 7rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+:host ::ng-deep .text-field--textarea .mat-mdc-form-field-flex {
+  align-items: flex-start;
+}
+
+:host ::ng-deep .text-field--textarea .mat-mdc-form-field-infix {
+  min-height: 8rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }

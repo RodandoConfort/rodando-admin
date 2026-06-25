@@ -80,6 +80,7 @@ export interface TableFilterChangeEvent {
 }
 
 export interface DataTableToolbarConfig {
+  segments?: TableSegmentConfig;
   search?: TableSearchConfig;
   filters?: readonly TableFilterConfig[];
 }
@@ -113,4 +114,17 @@ export interface DataTableConfig<TItem> {
   emptyActionLabel?: string;
 
   loadingRows?: number;
+}
+
+export type TableSegmentValue = string;
+
+export interface TableSegmentOption {
+  label: string;
+  value: TableSegmentValue;
+  icon?: string;
+}
+
+export interface TableSegmentConfig {
+  value: TableSegmentValue;
+  options: readonly TableSegmentOption[];
 }

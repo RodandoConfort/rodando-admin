@@ -9,6 +9,7 @@ import { DynamicFieldConfig } from '../../form.types';
 
 @Component({
   selector: 'app-date-field',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -16,6 +17,7 @@ import { DynamicFieldConfig } from '../../form.types';
     MatDatepickerModule,
   ],
   templateUrl: './date-field.html',
+  styleUrl: './date-field.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateField {

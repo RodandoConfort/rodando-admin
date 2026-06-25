@@ -16,6 +16,7 @@ import {
   TableBadgeTone,
   TableColumn,
   TableFilterChangeEvent,
+  TableSegmentValue,
 } from '../table.types';
 
 @Component({
@@ -49,6 +50,7 @@ export class DataTable<TItem> {
   readonly searchChange = output<string>();
   readonly filterChange = output<TableFilterChangeEvent>();
   readonly pageChange = output<DataTablePageChangeEvent>();
+  readonly segmentChange = output<TableSegmentValue>();
 
   readonly visibleColumns = computed(() =>
     this.config().columns.filter((column) => column.visible !== false),

@@ -1,0 +1,37 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.date-field {
+  width: 100%;
+
+  --mat-form-field-container-height: var(--form-field-height);
+  --mat-form-field-container-vertical-padding: var(--form-field-padding-y);
+  --mat-form-field-outlined-container-shape: var(--form-field-radius);
+
+  --mat-form-field-outlined-outline-color: var(--app-border);
+  --mat-form-field-outlined-hover-outline-color: var(--app-border-strong);
+  --mat-form-field-outlined-focus-outline-color: var(--app-primary);
+}
+
+.date-field input {
+  color: var(--app-text) !important;
+  -webkit-text-fill-color: var(--app-text) !important;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.date-field input::placeholder {
+  color: var(--app-text-muted);
+}
+
+.date-field .mat-datepicker-toggle {
+  color: var(--app-text-muted);
+}
+
+:host ::ng-deep .mat-datepicker-toggle-default-icon {
+  color: var(--app-text-muted);
+  width: 1.15rem;
+  height: 1.15rem;
+}

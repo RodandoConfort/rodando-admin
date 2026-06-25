@@ -13,11 +13,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { merge, startWith } from 'rxjs';
 
-import { DynamicField } from '../dynamic-field/dynamic-field';
-import { DynamicFormBuilder, DynamicFormValue } from '../dynamic-form-builder';
-import { DynamicFormConfig } from '../form.types';
 import { SubmitButton } from '../../components/buttons/submit-button/submit-button';
+import { DynamicField } from '../dynamic-field/dynamic-field';
+import {
+  DynamicFormBuilder,
+  DynamicFormValue,
+} from '../dynamic-form-builder';
 import { getFormError } from '../form-errors';
+import {
+  DynamicFieldConfig,
+  DynamicFormConfig,
+} from '../form.types';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -49,24 +55,24 @@ export class DynamicForm {
   readonly formValidationError = signal<string | null>(null);
 
   readonly submitDisabled = computed(() => {
-    const disableWhenInvalid =
-      this.config().disableSubmitWhenInvalid ?? false;
+    const disableWhenInvalid = this.config().disableSubmitWhenInvalid ?? false;
 
     return this.saving() || (disableWhenInvalid && this.formInvalid());
   });
 
   readonly imageAsideFields = computed(() =>
-  this.config().fields.filter((field) => field.type === 'image'),
-);
+    this.config().fields.filter((field) => field.type === 'image'),
+  );
 
-readonly mainFields = computed(() =>
-  this.config().fields.filter((field) => field.type !== 'image'),
-);
+  readonly mainFields = computed(() =>
+    this.config().fields.filter((field) => field.type !== 'image'),
+  );
 
-readonly isImageAsideLayout = computed(() =>
-  this.config().layout === 'image-aside' &&
-  this.imageAsideFields().length > 0,
-);
+  readonly isImageAsideLayout = computed(
+    () =>
+      this.config().layout === 'image-aside' &&
+      this.imageAsideFields().length > 0,
+  );
 
   private readonly buildForm = effect((onCleanup) => {
     const form = this.dynamicFormBuilder.build(
@@ -76,18 +82,13 @@ readonly isImageAsideLayout = computed(() =>
 
     const syncFormState = (): void => {
       this.formInvalid.set(form.invalid);
-      this.formValidationError.set(
-        getFormError(this.config(), form),
-      );
+      this.formValidationError.set(getFormError(this.config(), form));
     };
 
     this.form.set(form);
     syncFormState();
 
-    const subscription = merge(
-      form.statusChanges,
-      form.valueChanges,
-    )
+    const subscription = merge(form.statusChanges, form.valueChanges)
       .pipe(startWith(null))
       .subscribe(() => {
         syncFormState();
@@ -98,15 +99,51 @@ readonly isImageAsideLayout = computed(() =>
     });
   });
 
+  readonly visibleGroups = computed(() => {
+    const config = this.config();
+    const groups = config.groups ?? [];
+
+    return groups
+      .map((group) => ({
+        ...group,
+        fields: config.fields.filter((field) => field.group === group.key),
+      }))
+      .filter((group) => group.fields.length > 0);
+  });
+
+  readonly ungroupedFields = computed(() =>
+    this.config().fields.filter((field) => !field.group),
+  );
+
+  readonly hasGroups = computed(() => this.visibleGroups().length > 0);
+
+  groupImageFields(
+    fields: readonly DynamicFieldConfig[],
+  ): readonly DynamicFieldConfig[] {
+    return fields.filter((field) => field.type === 'image');
+  }
+
+  groupCheckboxFields(
+    fields: readonly DynamicFieldConfig[],
+  ): readonly DynamicFieldConfig[] {
+    return fields.filter((field) => field.type === 'checkbox');
+  }
+
+  groupMainFields(
+    fields: readonly DynamicFieldConfig[],
+  ): readonly DynamicFieldConfig[] {
+    return fields.filter(
+      (field) => field.type !== 'image' && field.type !== 'checkbox',
+    );
+  }
+
   submit(): void {
     const form = this.form();
 
     if (form.invalid) {
       form.markAllAsTouched();
       this.formInvalid.set(true);
-      this.formValidationError.set(
-        getFormError(this.config(), form),
-      );
+      this.formValidationError.set(getFormError(this.config(), form));
       return;
     }
 

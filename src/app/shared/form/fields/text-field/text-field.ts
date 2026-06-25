@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  signal,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +16,7 @@ import { DynamicFieldConfig } from '../../form.types';
 
 @Component({
   selector: 'app-text-field',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -26,6 +33,10 @@ export class TextField {
   readonly control = input.required<FormControl>();
 
   readonly hidePassword = signal(true);
+
+  readonly isTextarea = computed(() => this.field().type === 'textarea');
+
+  readonly textareaRows = computed(() => this.field().rows ?? 4);
 
   readonly inputType = computed(() => {
     const type = this.field().type;

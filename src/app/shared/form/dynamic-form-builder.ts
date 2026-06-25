@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { DynamicFormConfig } from './form.types';
+import { DynamicFieldConfig, DynamicFormConfig } from './form.types';
 
 export type DynamicFormValue = Record<string, unknown>;
 
@@ -17,7 +17,7 @@ export class DynamicFormBuilder {
   ): FormGroup<Record<string, FormControl<unknown>>> {
     const controls = config.fields.reduce<Record<string, FormControl<unknown>>>(
       (accumulator, field) => {
-        const value = initialValue[field.key] ?? field.defaultValue ?? null;
+        const value = this.resolveInitialValue(field, initialValue);
 
         accumulator[field.key] = this.formBuilder.control(
           {
@@ -25,7 +25,7 @@ export class DynamicFormBuilder {
             disabled: field.disabled ?? false,
           },
           {
-            validators: field.validators ?? [],
+            validators: field.validators ? [...field.validators] : [],
           },
         );
 
@@ -35,7 +35,32 @@ export class DynamicFormBuilder {
     );
 
     return this.formBuilder.group(controls, {
-      validators: config.formValidators ?? [],
+      validators: config.formValidators ? [...config.formValidators] : [],
     });
+  }
+
+  private resolveInitialValue(
+    field: DynamicFieldConfig,
+    initialValue: DynamicFormValue,
+  ): unknown {
+    const incomingValue = initialValue[field.key];
+
+    if (incomingValue !== undefined) {
+      return incomingValue;
+    }
+
+    if (field.defaultValue !== undefined) {
+      return field.defaultValue;
+    }
+
+    if (field.type === 'select' && field.multiple) {
+      return [];
+    }
+
+    if (field.type === 'checkbox') {
+      return false;
+    }
+
+    return null;
   }
 }

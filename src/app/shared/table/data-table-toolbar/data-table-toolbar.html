@@ -1,51 +1,80 @@
-<section class="data-table-toolbar">
-  @if (config().search; as search) {
-    <mat-form-field class="data-table-toolbar__search" appearance="outline">
-      <mat-icon matIconPrefix>search</mat-icon>
-
-      <input
-        matInput
-        type="search"
-        [value]="searchValue()"
-        [placeholder]="search.placeholder ?? 'Buscar...'"
-        [attr.aria-label]="search.ariaLabel ?? 'Buscar en la tabla'"
-        (input)="emitSearch($event)"
-      />
-
-      @if (searchValue().trim().length > 0) {
-        <button
-          mat-icon-button
-          matSuffix
-          type="button"
-          class="data-table-toolbar__clear-search"
-          [attr.aria-label]="search.clearAriaLabel ?? 'Limpiar búsqueda'"
-          (click)="clearSearch()"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-      }
-    </mat-form-field>
-  }
-
-  @if ((config().filters?.length ?? 0) > 0) {
-    <div class="data-table-toolbar__filters">
-      @for (filter of config().filters ?? []; track filter.key) {
-        <mat-form-field class="data-table-toolbar__filter" appearance="outline">
-          <mat-label>{{ filter.label }}</mat-label>
-
-          <mat-select
-            [value]="filter.value ?? null"
-            [placeholder]="filter.placeholder ?? filter.label"
-            (selectionChange)="emitFilter(filter, $event)"
+<section
+  class="data-table-toolbar"
+  [class.data-table-toolbar--many-filters]="hasManyFilters()"
+>
+  @if (config().segments; as segments) {
+    <div class="data-table-toolbar__segments">
+      <mat-button-toggle-group
+        class="data-table-toolbar__segment-group"
+        [value]="segments.value"
+        hideSingleSelectionIndicator
+        (change)="emitSegment($event)"
+      >
+        @for (option of segments.options; track option.value) {
+          <mat-button-toggle
+            class="data-table-toolbar__segment"
+            [value]="option.value"
           >
-            @for (option of filter.options; track option.label) {
-              <mat-option [value]="option.value">
-                {{ option.label }}
-              </mat-option>
+            @if (option.icon) {
+              <mat-icon>{{ option.icon }}</mat-icon>
             }
-          </mat-select>
-        </mat-form-field>
-      }
+
+            <span>{{ option.label }}</span>
+          </mat-button-toggle>
+        }
+      </mat-button-toggle-group>
     </div>
   }
+
+  <div class="data-table-toolbar__controls">
+    @if (hasFilters()) {
+      <div class="data-table-toolbar__filters">
+        @for (filter of config().filters ?? []; track filter.key) {
+          <mat-form-field class="data-table-toolbar__filter" appearance="outline">
+            <mat-label>{{ filter.label }}</mat-label>
+
+            <mat-select
+              [value]="filter.value ?? null"
+              [placeholder]="filter.placeholder ?? filter.label"
+              (selectionChange)="emitFilter(filter, $event)"
+            >
+              @for (option of filter.options; track option.label) {
+                <mat-option [value]="option.value">
+                  {{ option.label }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+    }
+
+    @if (config().search; as search) {
+      <mat-form-field class="data-table-toolbar__search" appearance="outline">
+        <mat-icon matIconPrefix>search</mat-icon>
+
+        <input
+          matInput
+          type="search"
+          [value]="searchValue()"
+          [placeholder]="search.placeholder ?? 'Buscar...'"
+          [attr.aria-label]="search.ariaLabel ?? 'Buscar en la tabla'"
+          (input)="emitSearch($event)"
+        />
+
+        @if (searchValue().trim().length > 0) {
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            class="data-table-toolbar__clear-search"
+            [attr.aria-label]="search.clearAriaLabel ?? 'Limpiar búsqueda'"
+            (click)="clearSearch()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    }
+  </div>
 </section>

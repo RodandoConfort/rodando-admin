@@ -1,7 +1,25 @@
-<mat-checkbox [formControl]="control()">
-  {{ field().label }}
-</mat-checkbox>
+<div
+  class="checkbox-field"
+  [class.checkbox-field--checked]="control().value === true"
+>
+  <mat-checkbox
+    class="checkbox-field__control"
+    [formControl]="control()"
+  >
+    <span class="checkbox-field__label">
+      {{ field().label }}
+    </span>
+  </mat-checkbox>
 
-@if (field().hint) {
-  <p class="field-hint">{{ field().hint }}</p>
-}
+  @if (field().hint) {
+    <p class="checkbox-field__hint">
+      {{ field().hint }}
+    </p>
+  }
+
+  <!-- @if (control().invalid && (control().touched || control().dirty)) {
+    <p class="checkbox-field__error">
+      {{ errorMessage() }}
+    </p>
+  } -->
+</div>

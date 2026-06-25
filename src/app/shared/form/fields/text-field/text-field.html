@@ -1,4 +1,8 @@
-<mat-form-field appearance="outline" class="text-field">
+<mat-form-field
+  appearance="outline"
+  class="text-field"
+  [class.text-field--textarea]="field().type === 'textarea'"
+>
   <mat-label>{{ field().label }}</mat-label>
 
   @if (field().prefixIcon) {
@@ -6,19 +10,31 @@
   }
 
   @if (field().prefixText) {
-  <span matTextPrefix class="text-field__prefix">
-    {{ field().prefixText }}
-  </span>
-}
+    <span matTextPrefix class="text-field__prefix">
+      {{ field().prefixText }}
+    </span>
+  }
 
-  <input
-    matInput
-    [type]="inputType()"
-    [formControl]="control()"
-    [placeholder]="field().placeholder ?? ''"
-    [readonly]="field().readonly ?? false"
-    [autocomplete]="field().autocomplete ?? 'off'"
-  />
+  @if (field().type === 'textarea') {
+    <textarea
+      matInput
+      class="text-field__textarea"
+      [formControl]="control()"
+      [placeholder]="field().placeholder ?? ''"
+      [readonly]="field().readonly ?? false"
+      [autocomplete]="field().autocomplete ?? 'off'"
+      [rows]="field().rows ?? 4"
+    ></textarea>
+  } @else {
+    <input
+      matInput
+      [type]="inputType()"
+      [formControl]="control()"
+      [placeholder]="field().placeholder ?? ''"
+      [readonly]="field().readonly ?? false"
+      [autocomplete]="field().autocomplete ?? 'off'"
+    />
+  }
 
   @if (field().type === 'password') {
     <button

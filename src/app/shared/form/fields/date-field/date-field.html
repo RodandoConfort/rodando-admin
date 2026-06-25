@@ -1,4 +1,4 @@
-<mat-form-field appearance="outline">
+<mat-form-field appearance="outline" class="date-field">
   <mat-label>{{ field().label }}</mat-label>
 
   <input
@@ -6,7 +6,9 @@
     [matDatepicker]="picker"
     [formControl]="control()"
     [placeholder]="field().placeholder ?? ''"
-    [readonly]="field().readonly ?? false"
+    readonly
+    (click)="picker.open()"
+    (keydown)="$event.preventDefault()"
   />
 
   <mat-datepicker-toggle matIconSuffix [for]="picker" />

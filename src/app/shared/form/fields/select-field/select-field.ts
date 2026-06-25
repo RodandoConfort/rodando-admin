@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -8,7 +13,12 @@ import { DynamicFieldConfig } from '../../form.types';
 
 @Component({
   selector: 'app-select-field',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatSelectModule],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+  ],
   templateUrl: './select-field.html',
   styleUrl: './select-field.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

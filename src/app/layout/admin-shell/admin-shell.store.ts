@@ -1,5 +1,11 @@
 import { computed } from '@angular/core';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 
 export type AdminTheme = 'light' | 'dark';
 
@@ -9,10 +15,30 @@ type AdminShellState = {
   theme: AdminTheme;
 };
 
+const ADMIN_THEME_STORAGE_KEY = 'rodando-admin-theme';
+
+function readInitialTheme(): AdminTheme {
+  try {
+    const stored = globalThis.localStorage?.getItem(ADMIN_THEME_STORAGE_KEY);
+
+    return stored === 'light' || stored === 'dark' ? stored : 'dark';
+  } catch {
+    return 'dark';
+  }
+}
+
+function persistTheme(theme: AdminTheme): void {
+  try {
+    globalThis.localStorage?.setItem(ADMIN_THEME_STORAGE_KEY, theme);
+  } catch {
+    // No-op: localStorage puede no estar disponible.
+  }
+}
+
 const initialState: AdminShellState = {
   sidebarCollapsed: false,
   mobileSidebarOpen: false,
-  theme: 'dark',
+  theme: readInitialTheme(),
 };
 
 export const AdminShellStore = signalStore(
@@ -46,11 +72,14 @@ export const AdminShellStore = signalStore(
     },
 
     setTheme(theme: AdminTheme): void {
+      persistTheme(theme);
       patchState(store, { theme });
     },
 
     toggleTheme(): void {
       const nextTheme: AdminTheme = store.theme() === 'dark' ? 'light' : 'dark';
+
+      persistTheme(nextTheme);
 
       patchState(store, {
         theme: nextTheme,

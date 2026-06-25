@@ -28,27 +28,30 @@ export interface DynamicFieldConfig<TValue = unknown> {
   defaultValue?: TValue;
   disabled?: boolean;
   readonly?: boolean;
-  validators?: ValidatorFn[];
+  validators?: readonly ValidatorFn[];
 
   prefixIcon?: string;
   prefixText?: string;
   autocomplete?: string;
 
-  options?: DynamicSelectOption[];
+  options?: readonly DynamicSelectOption[];
 
   accept?: string;
   multiple?: boolean;
   maxFileSizeMb?: number;
   previewUrl?: string;
   fullWidth?: boolean;
+  group?: string;
+  /**
+   * Solo para campos type="textarea".
+   */
+  rows?: number;
 }
 
-export type DynamicFormLayout =
-  | 'default'
-  | 'image-aside';
+export type DynamicFormLayout = 'default' | 'image-aside';
 
 export interface DynamicFormConfig {
-  fields: DynamicFieldConfig[];
+  fields: readonly DynamicFieldConfig[];
   layout?: DynamicFormLayout;
 
   columns?: 1 | 2;
@@ -68,10 +71,25 @@ export interface DynamicFormConfig {
    * - email o phone obligatorio
    * - password/confirmPassword iguales
    */
-  formValidators?: ValidatorFn[];
+  formValidators?: readonly ValidatorFn[];
 
   /**
    * Mensajes para errores globales del formulario.
    */
   formErrorMessages?: Record<string, string>;
+
+  groups?: readonly DynamicFormGroupConfig[];
+}
+
+export type DynamicFormGroupLayout =
+  | 'default'
+  | 'media-right'
+  | 'checkbox-right';
+
+export interface DynamicFormGroupConfig {
+  key: string;
+  title: string;
+  description?: string;
+  columns?: number;
+  layout?: DynamicFormGroupLayout;
 }

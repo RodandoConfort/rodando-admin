@@ -6,23 +6,148 @@
     </div>
   }
 
-  @if (isImageAsideLayout()) {
+  @if (hasGroups()) {
+    <div class="dynamic-form__groups">
+      @for (group of visibleGroups(); track group.key) {
+        <section class="dynamic-form__group">
+          <header class="dynamic-form__group-header">
+            <h3>{{ group.title }}</h3>
+
+            @if (group.description) {
+              <p>{{ group.description }}</p>
+            }
+          </header>
+
+          @if (group.layout === 'media-right') {
+            <div class="dynamic-form__group-layout dynamic-form__group-layout--media-right">
+              <div class="dynamic-form__group-main">
+                <div
+                  class="dynamic-form__grid"
+                  [class.dynamic-form__grid--one]="(group.columns ?? 1) === 1"
+                >
+                  @for (field of groupMainFields(group.fields); track field.key) {
+                    <div
+                      class="dynamic-form__field"
+                      [class.dynamic-form__field--full]="field.fullWidth || field.type === 'textarea'"
+                    >
+                      <app-dynamic-field
+                        [field]="field"
+                        [form]="form()"
+                      />
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <aside class="dynamic-form__group-media">
+                @for (field of groupImageFields(group.fields); track field.key) {
+                  <div class="dynamic-form__field">
+                    <app-dynamic-field
+                      [field]="field"
+                      [form]="form()"
+                    />
+                  </div>
+                }
+              </aside>
+            </div>
+          } @else if (group.layout === 'checkbox-right') {
+            <div class="dynamic-form__group-layout dynamic-form__group-layout--checkbox-right">
+              <div class="dynamic-form__group-main">
+                <div
+                  class="dynamic-form__grid"
+                  [class.dynamic-form__grid--one]="(group.columns ?? 1) === 1"
+                >
+                  @for (field of groupMainFields(group.fields); track field.key) {
+                    <div
+                      class="dynamic-form__field"
+                      [class.dynamic-form__field--full]="field.fullWidth || field.type === 'textarea'"
+                    >
+                      <app-dynamic-field
+                        [field]="field"
+                        [form]="form()"
+                      />
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <aside class="dynamic-form__group-check">
+                @for (field of groupCheckboxFields(group.fields); track field.key) {
+                  <div class="dynamic-form__field">
+                    <app-dynamic-field
+                      [field]="field"
+                      [form]="form()"
+                    />
+                  </div>
+                }
+              </aside>
+            </div>
+          } @else {
+            <div
+              class="dynamic-form__grid"
+              [class.dynamic-form__grid--one]="(group.columns ?? config().columns ?? 2) === 1"
+            >
+              @for (field of group.fields; track field.key) {
+                <div
+                  class="dynamic-form__field"
+                  [class.dynamic-form__field--full]="field.fullWidth || field.type === 'textarea'"
+                >
+                  <app-dynamic-field
+                    [field]="field"
+                    [form]="form()"
+                  />
+                </div>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      @if (ungroupedFields().length > 0) {
+        <section class="dynamic-form__ungrouped">
+          <div
+            class="dynamic-form__grid"
+            [class.dynamic-form__grid--one]="(config().columns ?? 2) === 1"
+          >
+            @for (field of ungroupedFields(); track field.key) {
+              <div
+                class="dynamic-form__field"
+                [class.dynamic-form__field--full]="field.fullWidth || field.type === 'textarea'"
+              >
+                <app-dynamic-field
+                  [field]="field"
+                  [form]="form()"
+                />
+              </div>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  } @else if (isImageAsideLayout()) {
     <section class="dynamic-form__aside-layout">
       <aside class="dynamic-form__aside-media">
         @for (field of imageAsideFields(); track field.key) {
-          <app-dynamic-field
-            [field]="field"
-            [form]="form()"
-          />
+          <div class="dynamic-form__field">
+            <app-dynamic-field
+              [field]="field"
+              [form]="form()"
+            />
+          </div>
         }
       </aside>
 
       <div class="dynamic-form__aside-fields">
         @for (field of mainFields(); track field.key) {
-          <app-dynamic-field
-            [field]="field"
-            [form]="form()"
-          />
+          <div
+            class="dynamic-form__field"
+            [class.dynamic-form__field--full]="field.fullWidth || field.type === 'textarea'"
+          >
+            <app-dynamic-field
+              [field]="field"
+              [form]="form()"
+            />
+          </div>
         }
       </div>
     </section>
@@ -32,10 +157,15 @@
       [class.dynamic-form__grid--one]="(config().columns ?? 2) === 1"
     >
       @for (field of config().fields; track field.key) {
-        <app-dynamic-field
-          [field]="field"
-          [form]="form()"
-        />
+        <div
+          class="dynamic-form__field"
+          [class.dynamic-form__field--full]="field.fullWidth || field.type === 'textarea'"
+        >
+          <app-dynamic-field
+            [field]="field"
+            [form]="form()"
+          />
+        </div>
       }
     </div>
   }

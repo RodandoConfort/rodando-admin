@@ -1,9 +1,10 @@
-<mat-form-field appearance="outline">
+<mat-form-field appearance="outline" class="number-field">
   <mat-label>{{ field().label }}</mat-label>
 
   <input
     matInput
     type="number"
+    inputmode="numeric"
     [formControl]="control()"
     [placeholder]="field().placeholder ?? ''"
     [readonly]="field().readonly ?? false"

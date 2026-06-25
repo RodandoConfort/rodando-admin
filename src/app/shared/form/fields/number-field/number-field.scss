@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.number-field {
+  width: 100%;
+
+  --mat-form-field-container-height: var(--form-field-height);
+  --mat-form-field-container-vertical-padding: var(--form-field-padding-y);
+  --mat-form-field-outlined-container-shape: var(--form-field-radius);
+
+  --mat-form-field-outlined-outline-color: var(--app-border);
+  --mat-form-field-outlined-hover-outline-color: var(--app-border-strong);
+  --mat-form-field-outlined-focus-outline-color: var(--app-primary);
+
+  --mat-form-field-outlined-input-text-color: var(--app-text);
+  --mat-form-field-outlined-label-text-color: var(--app-text-muted);
+  --mat-form-field-outlined-focus-label-text-color: var(--app-primary);
+
+  --mdc-outlined-text-field-outline-color: var(--app-border);
+  --mdc-outlined-text-field-hover-outline-color: var(--app-border-strong);
+  --mdc-outlined-text-field-focus-outline-color: var(--app-primary);
+
+  --mdc-outlined-text-field-label-text-color: var(--app-text-muted);
+  --mdc-outlined-text-field-hover-label-text-color: var(--app-text-muted);
+  --mdc-outlined-text-field-focus-label-text-color: var(--app-primary);
+
+  --mdc-outlined-text-field-input-text-color: var(--app-text);
+  --mdc-outlined-text-field-caret-color: var(--app-primary);
+}
+
+.number-field input {
+  color: var(--app-text) !important;
+  -webkit-text-fill-color: var(--app-text) !important;
+  font-weight: 700;
+}
+
+.number-field input::placeholder {
+  color: var(--app-text-muted);
+  font-weight: 500;
+}
+
+/* Quita las flechas feas del input number en Chrome, Edge, Safari */
+.number-field input::-webkit-outer-spin-button,
+.number-field input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+/* Quita las flechas en Firefox */
+.number-field input[type='number'] {
+  appearance: textfield;
+}

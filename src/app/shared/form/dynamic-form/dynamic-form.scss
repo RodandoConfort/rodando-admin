@@ -7,9 +7,14 @@
   gap: var(--dynamic-form-gap, 1.25rem);
 }
 
+/* =========================================================
+   GRID BASE
+========================================================= */
+
 .dynamic-form__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: var(--dynamic-form-grid-gap, 1rem);
 }
 
@@ -17,20 +22,34 @@
   grid-template-columns: 1fr;
 }
 
+.dynamic-form__field {
+  min-width: 0;
+  width: 100%;
+}
+
+.dynamic-form__field--full {
+  grid-column: 1 / -1;
+}
+
+/* =========================================================
+   ERROR GENERAL
+========================================================= */
+
 .dynamic-form__error {
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
   padding: 0.85rem 0.95rem;
-  color: #991b1b;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  color: #fca5a5;
+  background: rgb(220 38 38 / 12%);
+  border: 1px solid rgb(248 113 113 / 28%);
   border-radius: 1rem;
 
   mat-icon {
     width: 1.15rem;
     height: 1.15rem;
     margin-top: 0.05rem;
+    color: var(--app-danger);
     font-size: 1.15rem;
   }
 
@@ -40,6 +59,96 @@
     line-height: 1.45;
   }
 }
+
+/* =========================================================
+   GRUPOS DEL FORMULARIO
+========================================================= */
+
+.dynamic-form__groups {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.dynamic-form__group,
+.dynamic-form__ungrouped {
+  display: grid;
+  gap: 1.15rem;
+  padding: 1.2rem;
+  background: color-mix(
+    in srgb,
+    var(--app-surface-2) 76%,
+    var(--app-surface)
+  );
+  border: 1px solid var(--app-border);
+  border-radius: 1.15rem;
+}
+
+.dynamic-form__group-header {
+  display: grid;
+  gap: 0.35rem;
+  padding-bottom: 0.15rem;
+
+  h3 {
+    margin: 0;
+    color: var(--app-text);
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    max-width: 62rem;
+    color: var(--app-text-muted);
+    font-size: 0.86rem;
+    font-weight: 620;
+    line-height: 1.5;
+  }
+}
+
+/* =========================================================
+   LAYOUT IMAGE ASIDE
+========================================================= */
+
+.dynamic-form__aside-layout {
+  display: grid;
+  grid-template-columns: minmax(22rem, 30rem) minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.dynamic-form__aside-media {
+  min-width: 0;
+}
+
+.dynamic-form__aside-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: var(--dynamic-form-grid-gap, 1rem);
+  min-width: 0;
+}
+
+/* =========================================================
+   ERROR DE VALIDACIÓN DEL FORM
+========================================================= */
+
+.dynamic-form__form-error {
+  margin: 0;
+  padding: 0.85rem 0.95rem;
+  color: #fca5a5;
+  background: rgb(220 38 38 / 12%);
+  border: 1px solid rgb(248 113 113 / 28%);
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   ACCIONES
+========================================================= */
 
 .dynamic-form__actions {
   display: flex;
@@ -90,45 +199,90 @@
   }
 }
 
-@media (width <= 768px) {
-  .dynamic-form__grid {
-    grid-template-columns: 1fr;
-  }
+.dynamic-form__actions--stretch {
+  width: 100%;
 }
 
-.dynamic-form__aside-layout {
-  display: grid;
-  grid-template-columns: minmax(22rem, 30rem) minmax(0, 1fr);
-  align-items: start;
-  gap: 1.5rem;
+.dynamic-form__actions--stretch > button,
+.dynamic-form__actions--stretch app-submit-button {
+  width: 100%;
+  min-width: 100%;
 }
 
-.dynamic-form__aside-media {
-  min-width: 0;
-}
-
-.dynamic-form__aside-fields {
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: start;
-  gap: var(--dynamic-form-grid-gap, 1rem);
-  min-width: 0;
-}
-
-.dynamic-form__form-error {
-  margin: 0;
-  padding: 0.85rem 0.95rem;
-  color: #991b1b;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: 1rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  line-height: 1.45;
-}
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media (width <= 980px) {
   .dynamic-form__aside-layout {
     grid-template-columns: 1fr;
   }
+}
+
+@media (width <= 768px) {
+  .dynamic-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dynamic-form__group,
+  .dynamic-form__ungrouped {
+    padding: 1rem;
+  }
+
+  .dynamic-form__actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .dynamic-form__actions > button {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
+.dynamic-form__group-layout {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+.dynamic-form__group-layout--media-right {
+  grid-template-columns: minmax(0, 1fr) minmax(22rem, 30rem);
+}
+
+.dynamic-form__group-layout--checkbox-right {
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+}
+
+.dynamic-form__group-main,
+.dynamic-form__group-media,
+.dynamic-form__group-check {
+  min-width: 0;
+}
+
+.dynamic-form__group-media {
+  align-self: stretch;
+}
+
+.dynamic-form__group-check {
+  align-self: stretch;
+  display: grid;
+}
+
+.dynamic-form__group-layout--media-right .dynamic-form__grid,
+.dynamic-form__group-layout--checkbox-right .dynamic-form__grid {
+  grid-template-columns: 1fr;
+}
+
+@media (width <= 980px) {
+  .dynamic-form__group-layout--media-right,
+  .dynamic-form__group-layout--checkbox-right {
+    grid-template-columns: 1fr;
+  }
+
+  @media (width <= 768px) {
+  .dynamic-form__field--full {
+    grid-column: auto;
+  }
+}
 }

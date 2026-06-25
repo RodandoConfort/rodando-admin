@@ -8,6 +8,7 @@ import { DynamicFieldConfig } from '../../form.types';
   selector: 'app-checkbox-field',
   imports: [ReactiveFormsModule, MatCheckboxModule],
   templateUrl: './checkbox-field.html',
+  styleUrl: './checkbox-field.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckboxField {

@@ -3,6 +3,7 @@
     @if (toolbarConfig(); as toolbar) {
       <app-data-table-toolbar
         [config]="toolbar"
+        (segmentChange)="segmentChange.emit($event)"
         (searchChange)="searchChange.emit($event)"
         (filterChange)="filterChange.emit($event)"
       />
