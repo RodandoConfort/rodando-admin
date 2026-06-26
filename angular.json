@@ -37,9 +37,10 @@
             "production": {
               "budgets": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "type": "anyComponentStyle",
+                  "baseline": "4kb",
+                  "maximumWarning": "10kb",
+                  "maximumError": "20kb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -67,7 +68,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "src/proxy.conf.json"
-            },
+          },
           "configurations": {
             "production": {
               "buildTarget": "rodando-admin:build:production"
