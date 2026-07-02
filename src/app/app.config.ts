@@ -20,6 +20,26 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { apiErrorInterceptor } from './core/interceptors/api-error.interceptor';
 import { authTokenInterceptor } from './core/interceptors/auth-token.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { provideEchartsCore } from 'ngx-echarts';
+
+import * as echarts from 'echarts/core';
+import { BarChart, LineChart, PieChart } from 'echarts/charts';
+import {
+  GridComponent,
+  LegendComponent,
+  TooltipComponent,
+} from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+
+echarts.use([
+  BarChart,
+  LineChart,
+  PieChart,
+  GridComponent,
+  LegendComponent,
+  TooltipComponent,
+  CanvasRenderer,
+]);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -44,6 +64,8 @@ export const appConfig: ApplicationConfig = {
         onSameUrlNavigation: 'reload',
       }),
     ),
+
+    provideEchartsCore({ echarts }),
 
     provideHttpClient(
       withInterceptors([authTokenInterceptor, apiErrorInterceptor, authInterceptor]),

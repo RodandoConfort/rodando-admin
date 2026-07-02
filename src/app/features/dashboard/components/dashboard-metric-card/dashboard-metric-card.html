@@ -1,0 +1,24 @@
+<article
+  class="metric-card"
+  [class.metric-card--primary]="tone() === 'primary'"
+  [class.metric-card--success]="tone() === 'success'"
+  [class.metric-card--warning]="tone() === 'warning'"
+  [class.metric-card--danger]="tone() === 'danger'"
+  [class.metric-card--neutral]="tone() === 'neutral'"
+>
+  <div class="metric-card__header">
+    <span class="metric-card__label">{{ label() }}</span>
+
+    @if (icon()) {
+      <span class="metric-card__icon">
+        <mat-icon>{{ icon() }}</mat-icon>
+      </span>
+    }
+  </div>
+
+  <strong class="metric-card__value">{{ value() }}</strong>
+
+  @if (hint()) {
+    <span class="metric-card__hint">{{ hint() }}</span>
+  }
+</article>

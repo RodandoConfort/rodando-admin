@@ -1,0 +1,330 @@
+<section class="dashboard-page">
+  <header class="dashboard-hero">
+    <div class="dashboard-hero__copy">
+      <span class="dashboard-eyebrow">Rodando Admin</span>
+      <h1>Panel general</h1>
+      <p>
+        Métricas reales de operación, finanzas, drivers, vehículos y pasajeros.
+      </p>
+    </div>
+
+    <div class="dashboard-actions">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Rango</mat-label>
+
+        <mat-select
+          [value]="store.query().preset"
+          (selectionChange)="changePreset($event)"
+        >
+          @for (option of presetOptions; track option.value) {
+            <mat-option [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        type="button"
+        [disabled]="store.loading()"
+        (click)="store.reloadDashboard()"
+      >
+        <mat-icon>refresh</mat-icon>
+        Actualizar
+      </button>
+    </div>
+  </header>
+
+  @if (store.loading() && !store.hasData()) {
+    <app-page-loader
+      title="Cargando dashboard..."
+      description="Estamos preparando las métricas del panel administrativo."
+      minHeight="24rem"
+    />
+  } @else {
+    @if (store.error()) {
+      <div class="dashboard-alert dashboard-alert--danger">
+        <mat-icon>error</mat-icon>
+        <span>{{ store.error() }}</span>
+      </div>
+    }
+
+    @if (store.settlementDataQuality()?.missingSettlementTrips) {
+      <div class="dashboard-alert dashboard-alert--warning">
+        <mat-icon>warning</mat-icon>
+        <span>
+          Hay {{ store.settlementDataQuality()?.missingSettlementTrips }}
+          viajes completados sin settlement financiero. Los reportes financieros
+          serán más exactos con los viajes nuevos que ya guardan snapshot.
+        </span>
+      </div>
+    }
+
+    @if (overview(); as o) {
+      <section class="metrics-grid">
+        <app-dashboard-metric-card
+          label="Viajes totales"
+          [value]="formatNumber(o.trips.total)"
+          hint="Solicitudes del período"
+          icon="local_taxi"
+          tone="primary"
+        />
+
+        <app-dashboard-metric-card
+          label="Completados"
+          [value]="formatNumber(o.trips.completed)"
+          [hint]="formatPercent(o.trips.completionRate)"
+          icon="check_circle"
+          tone="success"
+        />
+
+        <app-dashboard-metric-card
+          label="Cancelados"
+          [value]="formatNumber(o.trips.cancelled)"
+          [hint]="formatPercent(o.trips.cancellationRate)"
+          icon="cancel"
+          tone="danger"
+        />
+
+        <app-dashboard-metric-card
+          label="Sin conductor"
+          [value]="formatNumber(o.trips.noDriversFound)"
+          hint="No drivers found"
+          icon="person_off"
+          tone="warning"
+        />
+
+        <app-dashboard-metric-card
+          label="Ingreso bruto"
+          [value]="formatMoney(o.finance.grossRevenue)"
+          hint="Total movido"
+          icon="payments"
+          tone="primary"
+        />
+
+        <app-dashboard-metric-card
+          label="Ingreso plataforma"
+          [value]="formatMoney(o.finance.platformRevenue)"
+          hint="Comisión real"
+          icon="account_balance_wallet"
+          tone="success"
+        />
+
+        <app-dashboard-metric-card
+          label="Ganancia drivers"
+          [value]="formatMoney(o.finance.driverEarnings)"
+          hint="Earnings conductores"
+          icon="directions_car"
+          tone="neutral"
+        />
+
+        <app-dashboard-metric-card
+          label="Ticket promedio"
+          [value]="formatMoney(o.finance.averageTripValue)"
+          hint="Promedio por viaje"
+          icon="receipt_long"
+          tone="neutral"
+        />
+
+        <app-dashboard-metric-card
+          label="Km recorridos"
+          [value]="formatKm(o.distance.totalKm)"
+          [hint]="'Promedio: ' + formatKm(o.distance.averageKmPerTrip)"
+          icon="route"
+          tone="neutral"
+        />
+
+        <app-dashboard-metric-card
+          label="Tiempo total"
+          [value]="formatMinutes(o.distance.totalMinutes)"
+          hint="Minutos en servicio"
+          icon="schedule"
+          tone="neutral"
+        />
+
+        <app-dashboard-metric-card
+          label="Drivers activos"
+          [value]="formatNumber(o.drivers.activeDrivers)"
+          hint="Con actividad en el período"
+          icon="groups"
+          tone="primary"
+        />
+
+        <app-dashboard-metric-card
+          label="Pasajeros activos"
+          [value]="formatNumber(o.passengers.activePassengers)"
+          hint="Usuarios que solicitaron viajes"
+          icon="person"
+          tone="neutral"
+        />
+      </section>
+    }
+
+    <section class="dashboard-charts">
+      <app-dashboard-chart-card
+        class="dashboard-chart dashboard-chart--finance"
+        title="Viajes e ingresos"
+        subtitle="Ingreso bruto, comisión real y viajes completados"
+        icon="monitoring"
+        [options]="financeOptions()"
+        [empty]="financeEmpty()"
+        emptyTitle="Sin serie financiera"
+        emptyDescription="No hay viajes completados para graficar en este rango."
+      />
+
+      <app-dashboard-chart-card
+        class="dashboard-chart dashboard-chart--status"
+        title="Estado de viajes"
+        subtitle="Distribución operacional"
+        icon="donut_large"
+        [options]="tripStatusOptions()"
+        [empty]="tripStatusEmpty()"
+        emptyTitle="Sin estados registrados"
+        emptyDescription="No hay viajes en este rango."
+      />
+
+      <app-dashboard-chart-card
+        class="dashboard-chart dashboard-chart--vehicles"
+        title="Uso de vehículos"
+        subtitle="Top vehículos por km recorridos"
+        icon="directions_car"
+        [options]="vehicleOptions()"
+        [empty]="vehicleUsageEmpty()"
+        emptyTitle="Sin uso de vehículos"
+        emptyDescription="No hay viajes completados con vehículo asignado."
+      />
+
+      <app-dashboard-chart-card
+        class="dashboard-chart dashboard-chart--drivers"
+        title="Top drivers"
+        subtitle="Drivers por ingreso bruto generado"
+        icon="emoji_events"
+        [options]="driversOptions()"
+        [empty]="driversEmpty()"
+        emptyTitle="Sin drivers destacados"
+        emptyDescription="No hay viajes completados por drivers en este rango."
+      />
+    </section>
+
+    <section class="dashboard-lists">
+      <article class="dashboard-panel">
+        <header class="dashboard-panel__header">
+          <div>
+            <h2>Top drivers</h2>
+            <p>Rendimiento financiero y operacional</p>
+          </div>
+
+          <span class="dashboard-panel__icon">
+            <mat-icon>leaderboard</mat-icon>
+          </span>
+        </header>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Driver</th>
+                <th>Viajes</th>
+                <th>Ingreso</th>
+                <th>Plataforma</th>
+                <th>Aceptación</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (driver of store.topDrivers(); track driver.driverId) {
+                <tr>
+                  <td>
+  <span class="entity-name">{{ driver.driverName || shortId(driver.driverId) }}</span>
+</td>
+                  <td>{{ formatNumber(driver.completedTrips) }}</td>
+                  <td>{{ formatMoney(driver.grossRevenue) }}</td>
+                  <td>{{ formatMoney(driver.platformRevenue) }}</td>
+                  <td>{{ formatPercent(driver.acceptanceRate) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5">
+                    <span class="table-empty">No hay datos de drivers.</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="dashboard-panel">
+        <header class="dashboard-panel__header">
+          <div>
+            <h2>Pasajeros destacados</h2>
+            <p>Usuarios con más uso de la plataforma</p>
+          </div>
+
+          <span class="dashboard-panel__icon">
+            <mat-icon>person_search</mat-icon>
+          </span>
+        </header>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Pasajero</th>
+                <th>Viajes</th>
+                <th>Km</th>
+                <th>Gastado</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (passenger of store.topPassengers(); track passenger.passengerId) {
+                <tr>
+                  <td>
+  <span class="entity-name">
+    {{ passenger.passengerName || shortId(passenger.passengerId) }}
+  </span>
+</td>
+                  <td>{{ formatNumber(passenger.completedTrips) }}</td>
+                  <td>{{ formatKm(passenger.totalKm) }}</td>
+                  <td>{{ formatMoney(passenger.totalSpent) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4">
+                    <span class="table-empty">No hay datos de pasajeros.</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="dashboard-panel dashboard-panel--compact">
+        <header class="dashboard-panel__header">
+          <div>
+            <h2>Estados de viaje</h2>
+            <p>Resumen operacional</p>
+          </div>
+
+          <span class="dashboard-panel__icon">
+            <mat-icon>fact_check</mat-icon>
+          </span>
+        </header>
+
+        <div class="status-list">
+          @for (status of store.tripStatusItems(); track status.status) {
+            <div class="status-list__item">
+              <span>{{ formatTripStatus(status.status) }}</span>
+              <strong>{{ formatNumber(status.total) }}</strong>
+            </div>
+          } @empty {
+            <p class="empty-text">No hay estados registrados.</p>
+          }
+        </div>
+      </article>
+    </section>
+  }
+</section>

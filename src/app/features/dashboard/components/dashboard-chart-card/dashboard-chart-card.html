@@ -1,0 +1,32 @@
+<section class="dashboard-chart-card">
+  <header class="dashboard-chart-card__header">
+    <div>
+      <h3>{{ title() }}</h3>
+
+      @if (subtitle()) {
+        <p>{{ subtitle() }}</p>
+      }
+    </div>
+
+    @if (icon()) {
+      <span class="dashboard-chart-card__icon">
+        <mat-icon>{{ icon() }}</mat-icon>
+      </span>
+    }
+  </header>
+
+  @if (empty()) {
+    <div class="dashboard-chart-card__empty">
+      <mat-icon>bar_chart_off</mat-icon>
+      <strong>{{ emptyTitle() }}</strong>
+      <p>{{ emptyDescription() }}</p>
+    </div>
+  } @else {
+    <div
+      echarts
+      class="dashboard-chart-card__canvas"
+      [options]="options()"
+      [autoResize]="true"
+    ></div>
+  }
+</section>
