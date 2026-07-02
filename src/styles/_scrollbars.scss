@@ -1,0 +1,125 @@
+/* =========================================================
+   GLOBAL SCROLLBARS
+========================================================= */
+
+:root,
+html[data-theme='light'] {
+  --app-scrollbar-size: 0.65rem;
+  --app-scrollbar-radius: 999px;
+
+  --app-scrollbar-track: color-mix(
+    in srgb,
+    var(--app-surface-3) 72%,
+    var(--app-surface) 28%
+  );
+
+  --app-scrollbar-thumb: color-mix(
+    in srgb,
+    var(--app-primary) 52%,
+    var(--app-border-strong) 48%
+  );
+
+  --app-scrollbar-thumb-hover: color-mix(
+    in srgb,
+    var(--app-primary-hover) 68%,
+    var(--app-primary) 32%
+  );
+
+  --app-scrollbar-thumb-active: var(--app-primary-800);
+}
+
+html[data-theme='dark'] {
+  --app-scrollbar-track: color-mix(
+    in srgb,
+    var(--app-surface-2) 76%,
+    var(--app-bg) 24%
+  );
+
+  --app-scrollbar-thumb: color-mix(
+    in srgb,
+    var(--app-primary) 58%,
+    var(--app-border-strong) 42%
+  );
+
+  --app-scrollbar-thumb-hover: color-mix(
+    in srgb,
+    var(--app-primary-hover) 72%,
+    var(--app-primary) 28%
+  );
+
+  --app-scrollbar-thumb-active: var(--app-primary-700);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color:
+    var(--app-scrollbar-thumb)
+    var(--app-scrollbar-track);
+}
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: var(--app-scrollbar-size);
+  height: var(--app-scrollbar-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--app-scrollbar-track);
+  border-radius: var(--app-scrollbar-radius);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    135deg,
+    var(--app-scrollbar-thumb),
+    color-mix(
+      in srgb,
+      var(--app-scrollbar-thumb-hover) 72%,
+      var(--app-scrollbar-thumb) 28%
+    )
+  );
+  border: 2px solid var(--app-scrollbar-track);
+  border-radius: var(--app-scrollbar-radius);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    135deg,
+    var(--app-scrollbar-thumb-hover),
+    var(--app-scrollbar-thumb)
+  );
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: var(--app-scrollbar-thumb-active);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Scrollbars horizontales en tablas, cards y contenedores */
+.app-scroll-x,
+.table-scroll,
+.dynamic-table__scroll,
+.cdk-virtual-scroll-viewport {
+  scrollbar-gutter: stable;
+}
+
+/* Textareas con scroll interno */
+textarea {
+  scrollbar-width: thin;
+  scrollbar-color:
+    var(--app-scrollbar-thumb)
+    var(--app-scrollbar-track);
+}
+
+textarea::-webkit-scrollbar {
+  width: 0.55rem;
+  height: 0.55rem;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  border-width: 1px;
+}

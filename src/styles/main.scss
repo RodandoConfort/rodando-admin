@@ -2,6 +2,7 @@
 
 @use './tokens';
 @use './layout';
+@use './scrollbars';
 // @use './material-overrides';
 
 @include mat.core();
