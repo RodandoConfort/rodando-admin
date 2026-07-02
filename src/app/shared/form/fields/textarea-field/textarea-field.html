@@ -1,9 +1,13 @@
-<mat-form-field appearance="outline">
+<mat-form-field
+  class="textarea-field"
+  appearance="outline"
+  subscriptSizing="dynamic"
+>
   <mat-label>{{ field().label }}</mat-label>
 
   <textarea
     matInput
-    rows="4"
+    rows="6"
     [formControl]="control()"
     [placeholder]="field().placeholder ?? ''"
     [readonly]="field().readonly ?? false"

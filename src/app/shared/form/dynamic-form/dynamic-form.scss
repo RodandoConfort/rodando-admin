@@ -286,3 +286,9 @@
   }
 }
 }
+
+.dynamic-form__field > app-dynamic-field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}

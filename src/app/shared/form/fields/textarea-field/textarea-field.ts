@@ -10,6 +10,7 @@ import { DynamicFieldConfig } from '../../form.types';
   selector: 'app-textarea-field',
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './textarea-field.html',
+  styleUrl: './textarea-field.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextareaField {

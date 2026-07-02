@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.textarea-field {
+  width: 100%;
+}
+
+textarea {
+  min-height: 7.5rem;
+  line-height: 1.5;
+  resize: vertical;
+}
