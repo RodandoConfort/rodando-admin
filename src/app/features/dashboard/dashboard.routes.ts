@@ -6,7 +6,7 @@ import { DASHBOARD_PROVIDERS } from './dashboard.providers';
 export const DASHBOARD_ROUTES: AppRoutes = [
   {
     path: '',
-    providers: [DASHBOARD_PROVIDERS, provideAdminDashboardEcharts()],
+    providers: [DASHBOARD_PROVIDERS],
     data: {
       title: 'Dashboard',
       breadcrumb: 'Dashboard',
