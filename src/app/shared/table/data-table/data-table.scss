@@ -235,7 +235,7 @@ html[data-theme='dark'] .data-table__badge--info {
 }
 
 .data-table__boolean-icon--true {
-  color: #3b82f6;
+  color: var(--app-warning);
 }
 
 .data-table__boolean-icon--false {

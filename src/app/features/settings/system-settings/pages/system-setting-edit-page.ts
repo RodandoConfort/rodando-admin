@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -24,11 +18,7 @@ import { PageLoader } from '../../../../shared/feedback/page-loader/page-loader'
 @Component({
   selector: 'app-system-setting-edit-page',
   standalone: true,
-  imports: [
-    EntityPageCard,
-    DynamicForm,
-    PageLoader,
-  ],
+  imports: [EntityPageCard, DynamicForm, PageLoader],
   template: `
     <app-entity-page-card
       title="Editar configuración"
@@ -150,9 +140,7 @@ export class SystemSettingEditPage {
       });
     } catch (error) {
       this.store.setLocalUpdateError(
-        error instanceof Error
-          ? error.message
-          : 'El valor de la configuración no es válido.',
+        error instanceof Error ? error.message : 'El valor de la configuración no es válido.',
       );
     }
   }

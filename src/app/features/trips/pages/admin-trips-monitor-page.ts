@@ -104,7 +104,7 @@ import {
     }
 
     .admin-trips-monitor__summary strong.is-online {
-      color: #16a34a;
+      color: var(--app-info);
     }
 
     .admin-trips-monitor__warning {
