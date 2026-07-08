@@ -1,0 +1,101 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.reports-metric {
+  --metric-accent: #8b5cf6;
+
+  position: relative;
+  min-height: 9rem;
+  padding: 1rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--metric-accent) 26%, var(--app-border, #252b38));
+  border-radius: var(--radius-xl, 1.25rem);
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--metric-accent) 17%, transparent),
+      transparent 10rem
+    ),
+    var(--app-surface, #10131a);
+  box-shadow: var(--shadow-md, 0 12px 28px rgb(0 0 0 / 28%));
+}
+
+.reports-metric::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--metric-accent);
+}
+
+.reports-metric--primary {
+  --metric-accent: #ef4444;
+}
+
+.reports-metric--accent {
+  --metric-accent: #f97316;
+}
+
+.reports-metric--warning {
+  --metric-accent: #f59e0b;
+}
+
+.reports-metric--danger {
+  --metric-accent: #e11d48;
+}
+
+.reports-metric--neutral {
+  --metric-accent: #8b5cf6;
+}
+
+.reports-metric__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.reports-metric__top span:first-child {
+  color: var(--app-text-muted, #a1aab8);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.045em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.reports-metric__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  color: var(--metric-accent);
+  background: color-mix(in srgb, var(--metric-accent) 16%, transparent);
+}
+
+.reports-metric__icon mat-icon {
+  width: 1.18rem;
+  height: 1.18rem;
+  font-size: 1.18rem;
+}
+
+.reports-metric strong {
+  display: block;
+  color: var(--app-text, #f8fafc);
+  font-size: clamp(1.45rem, 2vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.reports-metric small {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--app-text-muted, #a1aab8);
+  font-size: 0.82rem;
+  font-weight: 650;
+}

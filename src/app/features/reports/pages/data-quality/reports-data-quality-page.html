@@ -1,0 +1,149 @@
+<section class="reports-page">
+  <app-reports-segments />
+
+  <header class="reports-hero">
+    <div>
+      <span class="reports-eyebrow">Calidad de datos</span>
+      <h1>Settlement financiero</h1>
+      <p>
+        Control interno de viajes completados con snapshot financiero real para
+        asegurar reportes confiables.
+      </p>
+    </div>
+
+    @if (quality(); as item) {
+      <span class="reports-period">
+        {{ formatDate(item.period.from) }} — {{ formatDate(item.period.to) }}
+      </span>
+    }
+  </header>
+
+  <app-reports-filters-bar
+    [preset]="store.query().preset"
+    [disabled]="store.loading()"
+    (presetChange)="changePreset($event)"
+    (refresh)="reload()"
+  />
+
+  @if (store.loading() && !store.dataQuality()) {
+    <app-page-loader
+      title="Cargando calidad de datos..."
+      description="Estamos revisando viajes completados con y sin settlement."
+      minHeight="24rem"
+    />
+  } @else {
+    @if (store.error()) {
+      <div class="reports-alert reports-alert--danger">
+        <mat-icon>error</mat-icon>
+        <span>{{ store.error() }}</span>
+      </div>
+    }
+
+    @if (quality()?.missingSettlementTrips) {
+      <div class="reports-alert reports-alert--warning">
+        <mat-icon>warning</mat-icon>
+        <span>
+          Hay {{ quality()?.missingSettlementTrips }} viajes completados sin
+          settlement financiero. Conviene revisar si son viajes históricos o si
+          falta backfill.
+        </span>
+      </div>
+    }
+
+    <section class="reports-metrics-grid">
+      <app-reports-metric-card
+        label="Completados"
+        [value]="formatNumber(quality()?.completedTrips)"
+        hint="Viajes completados del rango"
+        icon="check_circle"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Con settlement"
+        [value]="formatNumber(quality()?.withSettlementTrips)"
+        hint="Viajes con snapshot financiero"
+        icon="verified"
+        tone="accent"
+      />
+
+      <app-reports-metric-card
+        label="Sin settlement"
+        [value]="formatNumber(quality()?.missingSettlementTrips)"
+        hint="Viajes pendientes de revisar"
+        icon="warning"
+        tone="danger"
+      />
+
+      <app-reports-metric-card
+        label="Cobertura"
+        [value]="formatPercent(coverageRate())"
+        hint="Porcentaje con settlement"
+        icon="analytics"
+        tone="neutral"
+      />
+    </section>
+
+    <section class="reports-charts-grid">
+      <app-reports-chart-card
+        class="reports-chart reports-chart--wide"
+        title="Cobertura de settlement"
+        subtitle="Viajes completados con o sin snapshot financiero"
+        icon="donut_large"
+        [options]="donutOptions()"
+        [empty]="empty()"
+        emptyTitle="Sin viajes completados"
+        emptyDescription="No hay viajes completados en este rango."
+      />
+
+      <app-reports-chart-card
+        title="Comparativa"
+        subtitle="Completados, con settlement y sin settlement"
+        icon="bar_chart"
+        [options]="barsOptions()"
+        [empty]="empty()"
+        emptyTitle="Sin datos"
+        emptyDescription="No hay datos de settlement para este rango."
+      />
+    </section>
+
+    <article class="reports-panel">
+      <header class="reports-panel__header">
+        <div>
+          <h2>Lectura operativa</h2>
+          <p>Interpretación rápida del estado financiero de los datos</p>
+        </div>
+
+        <span class="reports-panel__icon">
+          <mat-icon>rule</mat-icon>
+        </span>
+      </header>
+
+      <div class="quality-summary">
+        <div class="quality-summary__item">
+          <span>Cobertura actual</span>
+          <strong>{{ formatPercent(coverageRate()) }}</strong>
+        </div>
+
+        <div class="quality-summary__item">
+          <span>Riesgo financiero</span>
+          <strong>{{ formatPercent(missingRate()) }}</strong>
+        </div>
+
+        <div class="quality-summary__item">
+          <span>Estado</span>
+
+          @if (missingRate() === 0) {
+            <strong class="quality-summary__status quality-summary__status--ok">
+              Correcto
+            </strong>
+          } @else {
+            <strong class="quality-summary__status quality-summary__status--warning">
+              Requiere revisión
+            </strong>
+          }
+        </div>
+      </div>
+    </article>
+  }
+</section>

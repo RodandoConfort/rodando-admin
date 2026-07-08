@@ -1,0 +1,218 @@
+<section class="reports-page">
+  <app-reports-segments />
+
+  <header class="reports-hero">
+    <div>
+      <span class="reports-eyebrow">Reportes financieros</span>
+      <h1>Finanzas</h1>
+      <p>
+        Ingresos reales de plataforma, bruto movido, earnings de drivers,
+        ticket promedio y calidad del settlement.
+      </p>
+    </div>
+
+    @if (summary(); as item) {
+      <span class="reports-period">
+        {{ formatDate(item.period.from) }} — {{ formatDate(item.period.to) }}
+      </span>
+    }
+  </header>
+
+  <app-reports-filters-bar
+    [preset]="store.query().preset"
+    [groupBy]="store.query().groupBy"
+    [disabled]="store.loading()"
+    [showGroupBy]="true"
+    (presetChange)="changePreset($event)"
+    (groupByChange)="changeGroupBy($event)"
+    (refresh)="reload()"
+  />
+
+  @if (store.loading() && !store.finance()) {
+    <app-page-loader
+      title="Cargando reportes financieros..."
+      description="Estamos preparando los indicadores de ingresos y settlement."
+      minHeight="24rem"
+    />
+  } @else {
+    @if (store.error()) {
+      <div class="reports-alert reports-alert--danger">
+        <mat-icon>error</mat-icon>
+        <span>{{ store.error() }}</span>
+      </div>
+    }
+
+    @if (settlementQuality()?.missingSettlementTrips) {
+      <div class="reports-alert reports-alert--warning">
+        <mat-icon>warning</mat-icon>
+        <span>
+          Hay {{ settlementQuality()?.missingSettlementTrips }} viajes
+          completados sin snapshot financiero. El histórico puede necesitar
+          backfill.
+        </span>
+      </div>
+    }
+
+    @if (summary(); as item) {
+      <section class="reports-metrics-grid">
+        <app-reports-metric-card
+          label="Ingreso bruto"
+          [value]="formatMoney(item.grossRevenue)"
+          hint="Total movido por viajes completados"
+          icon="payments"
+          tone="primary"
+        />
+
+        <app-reports-metric-card
+          label="Ingreso plataforma"
+          [value]="formatMoney(item.platformRevenue)"
+          hint="Comisión real desde settlement"
+          icon="account_balance_wallet"
+          tone="accent"
+        />
+
+        <app-reports-metric-card
+          label="Earnings drivers"
+          [value]="formatMoney(item.driverEarnings)"
+          hint="Ganancia acumulada de conductores"
+          icon="local_taxi"
+          tone="neutral"
+        />
+
+        <app-reports-metric-card
+          label="Ticket promedio"
+          [value]="formatMoney(item.averageTripValue)"
+          hint="Promedio por viaje completado"
+          icon="receipt_long"
+          tone="warning"
+        />
+
+        <app-reports-metric-card
+          label="Viajes completados"
+          [value]="formatNumber(item.completedTrips)"
+          hint="Base de cálculo financiero"
+          icon="check_circle"
+          tone="primary"
+        />
+
+        <app-reports-metric-card
+          label="Descuentos"
+          [value]="formatMoney(item.discountsTotal)"
+          hint="Total de descuentos aplicados"
+          icon="sell"
+          tone="danger"
+        />
+
+        <app-reports-metric-card
+          label="Booking fees"
+          [value]="formatMoney(item.bookingFeesTotal)"
+          hint="Fees de reserva"
+          icon="confirmation_number"
+          tone="accent"
+        />
+
+        <app-reports-metric-card
+          label="Extras"
+          [value]="formatMoney(item.extraFeesTotal)"
+          hint="Recargos y cargos adicionales"
+          icon="add_card"
+          tone="neutral"
+        />
+      </section>
+    }
+
+    <section class="reports-charts-grid">
+      <app-reports-chart-card
+        class="reports-chart reports-chart--wide"
+        title="Evolución de ingresos"
+        subtitle="Ingreso bruto, comisión de plataforma y viajes completados"
+        icon="monitoring"
+        [options]="revenueOptions()"
+        [empty]="timeSeriesEmpty()"
+        emptyTitle="Sin serie financiera"
+        emptyDescription="No hay viajes completados para graficar en este rango."
+      />
+
+      <app-reports-chart-card
+        title="Composición financiera"
+        subtitle="Plataforma, drivers, descuentos y fees"
+        icon="donut_large"
+        [options]="compositionOptions()"
+        [empty]="compositionEmpty()"
+        emptyTitle="Sin composición financiera"
+        emptyDescription="No hay importes financieros suficientes para esta vista."
+      />
+
+      <app-reports-chart-card
+        title="Ticket promedio"
+        subtitle="Evolución del valor promedio por viaje"
+        icon="show_chart"
+        [options]="averageTicketOptions()"
+        [empty]="timeSeriesEmpty()"
+        emptyTitle="Sin ticket promedio"
+        emptyDescription="No hay datos temporales para calcular evolución."
+      />
+
+      <app-reports-chart-card
+        title="Calidad de settlement"
+        subtitle="Viajes completados con o sin snapshot financiero"
+        icon="verified"
+        [options]="settlementOptions()"
+        [empty]="settlementEmpty()"
+        emptyTitle="Sin viajes completados"
+        emptyDescription="No hay viajes completados en este rango."
+      />
+    </section>
+
+    <article class="reports-panel">
+      <header class="reports-panel__header">
+        <div>
+          <h2>Detalle por período</h2>
+          <p>Serie financiera agrupada por {{ store.query().groupBy }}</p>
+        </div>
+
+        <span class="reports-panel__icon">
+          <mat-icon>table_chart</mat-icon>
+        </span>
+      </header>
+
+      <div class="reports-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Período</th>
+              <th>Viajes</th>
+              <th>Ingreso bruto</th>
+              <th>Plataforma</th>
+              <th>Drivers</th>
+              <th>Ticket promedio</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (row of store.financeTimeSeries(); track row.period) {
+              <tr>
+                <td>
+                  <strong class="period-cell">{{ row.period }}</strong>
+                </td>
+                <td>{{ formatNumber(row.completedTrips) }}</td>
+                <td>{{ formatMoney(row.grossRevenue) }}</td>
+                <td>{{ formatMoney(row.platformRevenue) }}</td>
+                <td>{{ formatMoney(row.driverEarnings) }}</td>
+                <td>{{ formatMoney(row.averageTripValue) }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6">
+                  <span class="reports-empty">
+                    No hay datos financieros para este rango.
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </article>
+  }
+</section>

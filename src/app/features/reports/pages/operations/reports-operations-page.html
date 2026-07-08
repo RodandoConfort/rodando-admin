@@ -1,0 +1,257 @@
+<section class="reports-page">
+  <app-reports-segments />
+
+  <header class="reports-hero">
+    <div>
+      <span class="reports-eyebrow">Reportes operativos</span>
+      <h1>Operaciones</h1>
+      <p>
+        Estado general de viajes, cancelaciones, viajes sin conductor y actividad
+        real de drivers por horario.
+      </p>
+    </div>
+
+    <span class="reports-period">
+      {{ formatHour(store.query().hourFrom) }} — {{ formatHour(store.query().hourTo) }}
+    </span>
+  </header>
+
+  <app-reports-filters-bar
+    [preset]="store.query().preset"
+    [limit]="store.query().limit"
+    [hourFrom]="store.query().hourFrom"
+    [hourTo]="store.query().hourTo"
+    [disabled]="store.loading()"
+    [showLimit]="true"
+    [showHours]="true"
+    (presetChange)="changePreset($event)"
+    (limitChange)="changeLimit($event)"
+    (hoursChange)="changeHours($event)"
+    (refresh)="reload()"
+  />
+
+  @if (store.loading() && !store.operations()) {
+    <app-page-loader
+      title="Cargando reportes operativos..."
+      description="Estamos preparando estados, cancelaciones y actividad horaria."
+      minHeight="24rem"
+    />
+  } @else {
+    @if (store.error()) {
+      <div class="reports-alert reports-alert--danger">
+        <mat-icon>error</mat-icon>
+        <span>{{ store.error() }}</span>
+      </div>
+    }
+
+    <section class="reports-metrics-grid">
+      <app-reports-metric-card
+        label="Viajes totales"
+        [value]="formatInteger(metrics().totalTrips)"
+        hint="Solicitudes del rango"
+        icon="local_taxi"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Completados"
+        [value]="formatInteger(metrics().completedTrips)"
+        [hint]="formatPercent(metrics().completionRate)"
+        icon="check_circle"
+        tone="accent"
+      />
+
+      <app-reports-metric-card
+        label="Cancelados"
+        [value]="formatInteger(metrics().cancelledTrips)"
+        hint="Cancelaciones registradas"
+        icon="cancel"
+        tone="danger"
+      />
+
+      <app-reports-metric-card
+        label="Sin conductor"
+        [value]="formatInteger(metrics().noDriversFoundTrips)"
+        hint="No drivers found"
+        icon="person_off"
+        tone="warning"
+      />
+
+      <app-reports-metric-card
+        label="Tasa crítica"
+        [value]="formatPercent(metrics().cancellationRate)"
+        hint="Cancelados + sin conductor"
+        icon="warning"
+        tone="danger"
+      />
+
+      <app-reports-metric-card
+        label="Drivers con actividad"
+        [value]="formatInteger(metrics().activeDriversByTrips)"
+        hint="Detectados por viajes"
+        icon="groups"
+        tone="neutral"
+      />
+
+      <app-reports-metric-card
+        label="Viajes por horario"
+        [value]="formatInteger(metrics().activityCompletedTrips)"
+        hint="Según ventana horaria"
+        icon="schedule"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Ingreso por horario"
+        [value]="formatMoney(metrics().activityGrossRevenue)"
+        [hint]="formatKm(metrics().activityKm)"
+        icon="payments"
+        tone="accent"
+      />
+    </section>
+
+    <section class="reports-charts-grid">
+      <app-reports-chart-card
+        class="reports-chart reports-chart--wide"
+        title="Distribución de estados"
+        subtitle="Viajes agrupados por estado operacional"
+        icon="donut_large"
+        [options]="tripStatusOptions()"
+        [empty]="tripStatusEmpty()"
+        emptyTitle="Sin estados"
+        emptyDescription="No hay viajes registrados en este rango."
+      />
+
+      <app-reports-chart-card
+        title="Cancelaciones"
+        subtitle="Cancelados y viajes sin conductor"
+        icon="warning"
+        [options]="cancellationOptions()"
+        [empty]="cancellationEmpty()"
+        emptyTitle="Sin cancelaciones"
+        emptyDescription="No hay cancelaciones ni viajes sin conductor en este rango."
+      />
+
+      <app-reports-chart-card
+        class="reports-chart reports-chart--wide"
+        title="Actividad por hora"
+        subtitle="Viajes completados e ingresos por ventana horaria"
+        icon="schedule"
+        [options]="activityByHourOptions()"
+        [empty]="activityEmpty()"
+        emptyTitle="Sin actividad horaria"
+        emptyDescription="No hay actividad de drivers en la ventana seleccionada."
+      />
+
+      <app-reports-chart-card
+        title="Drivers más activos"
+        subtitle="Ranking por viajes completados en la ventana"
+        icon="leaderboard"
+        [options]="activityRankingOptions()"
+        [empty]="activityEmpty()"
+        emptyTitle="Sin drivers activos"
+        emptyDescription="No hay drivers con viajes en este horario."
+      />
+    </section>
+
+    <section class="reports-tables-grid">
+      <article class="reports-panel">
+        <header class="reports-panel__header">
+          <div>
+            <h2>Estados de viaje</h2>
+            <p>Resumen operativo del período</p>
+          </div>
+
+          <span class="reports-panel__icon">
+            <mat-icon>fact_check</mat-icon>
+          </span>
+        </header>
+
+        <div class="reports-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estado</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (status of store.tripStatusItems(); track status.status) {
+                <tr>
+                  <td>
+                    <strong class="entity-cell">
+                      {{ formatTripStatus(status.status) }}
+                    </strong>
+                  </td>
+                  <td>{{ formatInteger(status.total) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="2">
+                    <span class="reports-empty">No hay estados registrados.</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="reports-panel">
+        <header class="reports-panel__header">
+          <div>
+            <h2>Actividad horaria</h2>
+            <p>Drivers con viajes en la ventana seleccionada</p>
+          </div>
+
+          <span class="reports-panel__icon">
+            <mat-icon>schedule</mat-icon>
+          </span>
+        </header>
+
+        <div class="reports-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Driver</th>
+                <th>Completados</th>
+                <th>Ingreso</th>
+                <th>Km</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (activity of store.operationsDriverActivity(); track activity.driverId + '-' + activity.hour) {
+                <tr>
+                  <td>
+                    <strong class="period-cell">
+                      {{ formatHour(activity.hour) }}
+                    </strong>
+                  </td>
+                  <td>
+                    <strong class="entity-cell">
+                      {{ driverName(activity.driverName, activity.driverId) }}
+                    </strong>
+                  </td>
+                  <td>{{ formatInteger(activity.completedTrips) }}</td>
+                  <td>{{ formatMoney(activity.grossRevenue) }}</td>
+                  <td>{{ formatKm(activity.totalKm) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5">
+                    <span class="reports-empty">
+                      No hay actividad horaria para este filtro.
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  }
+</section>

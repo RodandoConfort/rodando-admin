@@ -110,6 +110,17 @@ export const ADMIN_ROUTES: AppRoutes = [
             (m) => m.PRICE_POLICIES_ROUTES,
           ),
       },
+      {
+        path: ADMIN_PATHS.reports,
+        data: {
+          title: 'Reportes',
+          breadcrumb: 'Reportes',
+          icon: 'analytics',
+          showInSidebar: true,
+        },
+        loadChildren: () =>
+          import('../../features/reports/reports.routes').then((m) => m.REPORTS_ROUTES),
+      },
     ],
   },
 ];

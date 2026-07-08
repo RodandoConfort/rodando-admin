@@ -64,4 +64,10 @@ export const ADMIN_NAVIGATION: AdminNavigationItem[] = [
     route: ROUTE_COMMANDS.admin.pricePolicies,
     exact: false,
   },
+  {
+    label: 'Reportes',
+    icon: 'analytics',
+    route: ROUTE_COMMANDS.admin.reports,
+    exact: false,
+  },
 ];

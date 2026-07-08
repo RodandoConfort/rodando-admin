@@ -1,0 +1,332 @@
+<section class="reports-page">
+  <app-reports-segments />
+
+  <header class="reports-hero">
+    <div>
+      <span class="reports-eyebrow">Reportes de drivers</span>
+      <h1>Drivers</h1>
+      <p>
+        Rendimiento financiero, calidad operacional, aceptación, cancelaciones,
+        rechazos y actividad real por horario.
+      </p>
+    </div>
+
+    <span class="reports-period">
+      {{ store.query().hourFrom }}:00 — {{ store.query().hourTo }}:00
+    </span>
+  </header>
+
+  <app-reports-filters-bar
+    [preset]="store.query().preset"
+    [limit]="store.query().limit"
+    [hourFrom]="store.query().hourFrom"
+    [hourTo]="store.query().hourTo"
+    [disabled]="store.loading()"
+    [showLimit]="true"
+    [showHours]="true"
+    (presetChange)="changePreset($event)"
+    (limitChange)="changeLimit($event)"
+    (hoursChange)="changeHours($event)"
+    (refresh)="reload()"
+  />
+
+  @if (store.loading() && !store.drivers()) {
+    <app-page-loader
+      title="Cargando reportes de drivers..."
+      description="Estamos preparando rendimiento, calidad y actividad horaria."
+      minHeight="24rem"
+    />
+  } @else {
+    @if (store.error()) {
+      <div class="reports-alert reports-alert--danger">
+        <mat-icon>error</mat-icon>
+        <span>{{ store.error() }}</span>
+      </div>
+    }
+
+    <section class="reports-metrics-grid">
+      <app-reports-metric-card
+        label="Viajes completados"
+        [value]="formatNumber(metrics().completedTrips)"
+        hint="Total completado por drivers"
+        icon="check_circle"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Ingreso bruto"
+        [value]="formatMoney(metrics().grossRevenue)"
+        hint="Total generado por drivers"
+        icon="payments"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Ingreso plataforma"
+        [value]="formatMoney(metrics().platformRevenue)"
+        hint="Comisión atribuida"
+        icon="account_balance_wallet"
+        tone="accent"
+      />
+
+      <app-reports-metric-card
+        label="Earnings drivers"
+        [value]="formatMoney(metrics().driverEarnings)"
+        hint="Ganancia acumulada"
+        icon="local_taxi"
+        tone="neutral"
+      />
+
+      <app-reports-metric-card
+        label="Km recorridos"
+        [value]="formatKm(metrics().totalKm)"
+        hint="Distancia completada"
+        icon="route"
+        tone="warning"
+      />
+
+      <app-reports-metric-card
+        label="Aceptación promedio"
+        [value]="formatPercent(metrics().averageAcceptanceRate)"
+        hint="Promedio del ranking"
+        icon="done_all"
+        tone="accent"
+      />
+
+      <app-reports-metric-card
+        label="Cancelación promedio"
+        [value]="formatPercent(metrics().averageCancellationRate)"
+        hint="Menor es mejor"
+        icon="cancel"
+        tone="danger"
+      />
+
+      <app-reports-metric-card
+        label="Rating promedio"
+        [value]="formatRating(metrics().averageRating)"
+        hint="Valor medio reportado"
+        icon="star"
+        tone="neutral"
+      />
+    </section>
+
+    <section class="reports-charts-grid">
+      <app-reports-chart-card
+        class="reports-chart reports-chart--wide"
+        title="Drivers por ingreso bruto"
+        subtitle="Ranking financiero del período seleccionado"
+        icon="leaderboard"
+        [options]="revenueOptions()"
+        [empty]="performanceEmpty()"
+        emptyTitle="Sin rendimiento de drivers"
+        emptyDescription="No hay drivers con viajes completados en este rango."
+      />
+
+      <app-reports-chart-card
+        title="Calidad operacional"
+        subtitle="Aceptación, completado y cancelación"
+        icon="verified"
+        [options]="qualityOptions()"
+        [empty]="qualityEmpty()"
+        emptyTitle="Sin ranking de calidad"
+        emptyDescription="No hay métricas acumuladas de calidad para mostrar."
+      />
+
+      <app-reports-chart-card
+        title="Drivers con riesgo"
+        subtitle="Ranking por mayor cancelación"
+        icon="warning"
+        [options]="worstQualityOptions()"
+        [empty]="worstQualityEmpty()"
+        emptyTitle="Sin datos de riesgo"
+        emptyDescription="No hay drivers con métricas críticas disponibles."
+      />
+
+      <app-reports-chart-card
+        title="Ofertas aceptadas vs rechazadas"
+        subtitle="Relación de comportamiento ante asignaciones"
+        icon="rule"
+        [options]="offersOptions()"
+        [empty]="performanceEmpty()"
+        emptyTitle="Sin datos de ofertas"
+        emptyDescription="No hay ofertas recibidas o aceptadas en este rango."
+      />
+
+      <app-reports-chart-card
+        class="reports-chart reports-chart--wide"
+        title="Actividad por horario"
+        subtitle="Viajes completados e ingresos por hora"
+        icon="schedule"
+        [options]="activityHoursOptions()"
+        [empty]="activityEmpty()"
+        emptyTitle="Sin actividad horaria"
+        emptyDescription="No hay actividad de drivers en el horario seleccionado."
+      />
+    </section>
+
+    <section class="reports-tables-grid">
+      <article class="reports-panel reports-panel--wide">
+        <header class="reports-panel__header">
+          <div>
+            <h2>Rendimiento financiero</h2>
+            <p>Drivers ordenados por ingreso bruto y viajes completados</p>
+          </div>
+
+          <span class="reports-panel__icon">
+            <mat-icon>table_chart</mat-icon>
+          </span>
+        </header>
+
+        <div class="reports-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Driver</th>
+                <th>Viajes</th>
+                <th>Ingreso bruto</th>
+                <th>Plataforma</th>
+                <th>Drivers</th>
+                <th>Km</th>
+                <th>Aceptación</th>
+                <th>Cancelación</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (driver of store.driverPerformance(); track driver.driverId) {
+                <tr>
+                  <td>
+                    <strong class="entity-cell">
+                      {{ driverName(driver.driverName, driver.driverId) }}
+                    </strong>
+                  </td>
+                  <td>{{ formatNumber(driver.completedTrips) }}</td>
+                  <td>{{ formatMoney(driver.grossRevenue) }}</td>
+                  <td>{{ formatMoney(driver.platformRevenue) }}</td>
+                  <td>{{ formatMoney(driver.driverEarnings) }}</td>
+                  <td>{{ formatKm(driver.totalKm) }}</td>
+                  <td>{{ formatPercent(driver.acceptanceRate) }}</td>
+                  <td>{{ formatPercent(driver.cancellationRate) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="8">
+                    <span class="reports-empty">
+                      No hay rendimiento de drivers para este rango.
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="reports-panel">
+        <header class="reports-panel__header">
+          <div>
+            <h2>Mejores drivers</h2>
+            <p>Ranking acumulado por calidad</p>
+          </div>
+
+          <span class="reports-panel__icon">
+            <mat-icon>emoji_events</mat-icon>
+          </span>
+        </header>
+
+        <div class="reports-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Driver</th>
+                <th>Aceptación</th>
+                <th>Completado</th>
+                <th>Rating</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (driver of store.driverQualityRanking(); track driver.driverId) {
+                <tr>
+                  <td>
+                    <strong class="entity-cell">
+                      {{ driverName(driver.driverName, driver.driverId) }}
+                    </strong>
+                  </td>
+                  <td>{{ formatPercent(driver.acceptanceRate) }}</td>
+                  <td>{{ formatPercent(driver.completionRate) }}</td>
+                  <td>{{ formatRating(driver.averageRating) }}</td>
+                  <td>{{ formatNumber(driver.baseScore) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5">
+                    <span class="reports-empty">
+                      No hay ranking de calidad disponible.
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="reports-panel">
+        <header class="reports-panel__header">
+          <div>
+            <h2>Actividad por hora</h2>
+            <p>Drivers activos en la ventana seleccionada</p>
+          </div>
+
+          <span class="reports-panel__icon">
+            <mat-icon>schedule</mat-icon>
+          </span>
+        </header>
+
+        <div class="reports-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Driver</th>
+                <th>Completados</th>
+                <th>Ingreso</th>
+                <th>Km</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (activity of store.driverActivityHours(); track activity.driverId + '-' + activity.hour) {
+                <tr>
+                  <td>
+                    <strong class="period-cell">
+                      {{ formatHour(activity.hour) }}
+                    </strong>
+                  </td>
+                  <td>
+                    <strong class="entity-cell">
+                      {{ driverName(activity.driverName, activity.driverId) }}
+                    </strong>
+                  </td>
+                  <td>{{ formatNumber(activity.completedTrips) }}</td>
+                  <td>{{ formatMoney(activity.grossRevenue) }}</td>
+                  <td>{{ formatKm(activity.totalKm) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5">
+                    <span class="reports-empty">
+                      No hay actividad horaria para este filtro.
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  }
+</section>

@@ -1,0 +1,98 @@
+<section class="reports-filters-bar">
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Rango</mat-label>
+
+    <mat-select
+      [value]="preset()"
+      [disabled]="disabled()"
+      (selectionChange)="onPresetChange($event)"
+    >
+      <mat-option value="today">Hoy</mat-option>
+      <mat-option value="last_7_days">Últimos 7 días</mat-option>
+      <mat-option value="last_30_days">Últimos 30 días</mat-option>
+      <mat-option value="last_3_months">Últimos 3 meses</mat-option>
+      <mat-option value="last_6_months">Últimos 6 meses</mat-option>
+      <mat-option value="last_year">Último año</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  @if (showGroupBy()) {
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Agrupar por</mat-label>
+
+      <mat-select
+        [value]="groupBy()"
+        [disabled]="disabled()"
+        (selectionChange)="onGroupByChange($event)"
+      >
+        @for (option of groupByOptions(); track option.value) {
+          <mat-option [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  @if (showLimit()) {
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Límite</mat-label>
+
+      <mat-select
+        [value]="limit()"
+        [disabled]="disabled()"
+        (selectionChange)="onLimitChange($event)"
+      >
+        @for (option of limitOptions; track option) {
+          <mat-option [value]="option">
+            {{ option }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  @if (showHours()) {
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Desde</mat-label>
+
+      <mat-select
+        [value]="hourFrom()"
+        [disabled]="disabled()"
+        (selectionChange)="onHourFromChange($event)"
+      >
+        @for (hour of hourOptions; track hour) {
+          <mat-option [value]="hour">
+            {{ formatHour(hour) }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Hasta</mat-label>
+
+      <mat-select
+        [value]="hourTo()"
+        [disabled]="disabled()"
+        (selectionChange)="onHourToChange($event)"
+      >
+        @for (hour of hourOptions; track hour) {
+          <mat-option [value]="hour">
+            {{ formatHour(hour) }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  <button
+    mat-flat-button
+    type="button"
+    [disabled]="disabled()"
+    (click)="refresh.emit()"
+  >
+    <mat-icon>refresh</mat-icon>
+    Actualizar
+  </button>
+</section>

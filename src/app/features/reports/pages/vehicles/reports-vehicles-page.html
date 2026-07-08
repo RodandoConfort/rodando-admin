@@ -1,0 +1,215 @@
+<section class="reports-page">
+  <app-reports-segments />
+
+  <header class="reports-hero">
+    <div>
+      <span class="reports-eyebrow">Reportes de vehículos</span>
+      <h1>Vehículos</h1>
+      <p>
+        Uso operativo de la flota: km recorridos, minutos de servicio,
+        viajes completados e ingresos generados por vehículo.
+      </p>
+    </div>
+
+    <span class="reports-period">
+      Top {{ store.query().limit }} vehículos
+    </span>
+  </header>
+
+  <app-reports-filters-bar
+    [preset]="store.query().preset"
+    [limit]="store.query().limit"
+    [disabled]="store.loading()"
+    [showLimit]="true"
+    (presetChange)="changePreset($event)"
+    (limitChange)="changeLimit($event)"
+    (refresh)="reload()"
+  />
+
+  @if (store.loading() && !store.vehicles()) {
+    <app-page-loader
+      title="Cargando reportes de vehículos..."
+      description="Estamos preparando uso, distancia, tiempo e ingresos de la flota."
+      minHeight="24rem"
+    />
+  } @else {
+    @if (store.error()) {
+      <div class="reports-alert reports-alert--danger">
+        <mat-icon>error</mat-icon>
+        <span>{{ store.error() }}</span>
+      </div>
+    }
+
+    <section class="reports-metrics-grid">
+      <app-reports-metric-card
+        label="Vehículos usados"
+        [value]="formatInteger(metrics().vehiclesCount)"
+        hint="Vehículos con viajes en el rango"
+        icon="directions_car"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Viajes completados"
+        [value]="formatInteger(metrics().completedTrips)"
+        hint="Total completado por vehículos"
+        icon="check_circle"
+        tone="accent"
+      />
+
+      <app-reports-metric-card
+        label="Km recorridos"
+        [value]="formatKm(metrics().totalKm)"
+        hint="Distancia total acumulada"
+        icon="route"
+        tone="warning"
+      />
+
+      <app-reports-metric-card
+        label="Tiempo de uso"
+        [value]="formatHours(metrics().totalMinutes)"
+        [hint]="formatMinutes(metrics().totalMinutes)"
+        icon="schedule"
+        tone="neutral"
+      />
+
+      <app-reports-metric-card
+        label="Ingreso bruto"
+        [value]="formatMoney(metrics().grossRevenue)"
+        hint="Ingresos generados por la flota"
+        icon="payments"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Km promedio"
+        [value]="formatKm(metrics().averageKmPerVehicle)"
+        hint="Promedio por vehículo"
+        icon="speed"
+        tone="warning"
+      />
+
+      <app-reports-metric-card
+        label="Viajes promedio"
+        [value]="formatNumber(metrics().averageTripsPerVehicle)"
+        hint="Promedio por vehículo"
+        icon="local_taxi"
+        tone="accent"
+      />
+
+      <app-reports-metric-card
+        label="Ingreso promedio"
+        [value]="formatMoney(metrics().averageRevenuePerVehicle)"
+        hint="Promedio por vehículo"
+        icon="analytics"
+        tone="neutral"
+      />
+    </section>
+
+    <section class="reports-charts-grid">
+      <app-reports-chart-card
+        class="reports-chart reports-chart--wide"
+        title="Km por vehículo"
+        subtitle="Uso acumulado estimado desde los viajes completados"
+        icon="route"
+        [options]="kmOptions()"
+        [empty]="usageEmpty()"
+        emptyTitle="Sin uso de vehículos"
+        emptyDescription="No hay vehículos con viajes completados en este rango."
+      />
+
+      <app-reports-chart-card
+        title="Participación de ingresos"
+        subtitle="Distribución del ingreso bruto por vehículo"
+        icon="donut_large"
+        [options]="revenueShareOptions()"
+        [empty]="revenueShareEmpty()"
+        emptyTitle="Sin ingresos por vehículo"
+        emptyDescription="No hay ingresos suficientes para mostrar distribución."
+      />
+
+      <app-reports-chart-card
+        title="Ingresos por vehículo"
+        subtitle="Vehículos que más dinero generaron"
+        icon="payments"
+        [options]="revenueOptions()"
+        [empty]="usageEmpty()"
+        emptyTitle="Sin ingresos"
+        emptyDescription="No hay ingresos de vehículos en este rango."
+      />
+
+      <app-reports-chart-card
+        title="Viajes y minutos de uso"
+        subtitle="Relación entre viajes completados y tiempo operativo"
+        icon="query_stats"
+        [options]="tripsMinutesOptions()"
+        [empty]="usageEmpty()"
+        emptyTitle="Sin actividad"
+        emptyDescription="No hay actividad de vehículos para este rango."
+      />
+    </section>
+
+    <article class="reports-panel">
+      <header class="reports-panel__header">
+        <div>
+          <h2>Detalle de vehículos</h2>
+          <p>Uso operativo ordenado por km recorridos y viajes completados</p>
+        </div>
+
+        <span class="reports-panel__icon">
+          <mat-icon>table_chart</mat-icon>
+        </span>
+      </header>
+
+      <div class="reports-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehículo</th>
+              <th>Viajes</th>
+              <th>Km</th>
+              <th>Minutos</th>
+              <th>Horas</th>
+              <th>Ingreso bruto</th>
+              <th>Ingreso / viaje</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (vehicle of store.vehicleUsage(); track vehicle.vehicleId) {
+              <tr>
+                <td>
+                  <strong class="entity-cell">
+                    {{ vehicleName(vehicle.vehicleLabel, vehicle.vehicleId) }}
+                  </strong>
+                </td>
+                <td>{{ formatInteger(vehicle.completedTrips) }}</td>
+                <td>{{ formatKm(vehicle.totalKm) }}</td>
+                <td>{{ formatMinutes(vehicle.totalMinutes) }}</td>
+                <td>{{ formatHours(vehicle.totalMinutes) }}</td>
+                <td>{{ formatMoney(vehicle.grossRevenue) }}</td>
+                <td>
+                  {{
+                    formatMoney(
+                      vehicle.completedTrips
+                        ? vehicle.grossRevenue / vehicle.completedTrips
+                        : 0
+                    )
+                  }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7">
+                  <span class="reports-empty">
+                    No hay datos de vehículos para este rango.
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </article>
+  }
+</section>

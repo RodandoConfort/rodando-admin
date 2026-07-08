@@ -1,0 +1,217 @@
+<section class="reports-page">
+  <app-reports-segments />
+
+  <header class="reports-hero">
+    <div>
+      <span class="reports-eyebrow">Reportes de usuarios</span>
+      <h1>Usuarios</h1>
+      <p>
+        Análisis de pasajeros: usuarios que más solicitan viajes, más gastan,
+        más completan, más cancelan y más kilómetros recorren.
+      </p>
+    </div>
+
+    <span class="reports-period">
+      Top {{ store.query().limit }} usuarios
+    </span>
+  </header>
+
+  <app-reports-filters-bar
+    [preset]="store.query().preset"
+    [limit]="store.query().limit"
+    [disabled]="store.loading()"
+    [showLimit]="true"
+    (presetChange)="changePreset($event)"
+    (limitChange)="changeLimit($event)"
+    (refresh)="reload()"
+  />
+
+  @if (store.loading() && !store.users()) {
+    <app-page-loader
+      title="Cargando reportes de usuarios..."
+      description="Estamos preparando uso, gasto, viajes y cancelaciones de pasajeros."
+      minHeight="24rem"
+    />
+  } @else {
+    @if (store.error()) {
+      <div class="reports-alert reports-alert--danger">
+        <mat-icon>error</mat-icon>
+        <span>{{ store.error() }}</span>
+      </div>
+    }
+
+    <section class="reports-metrics-grid">
+      <app-reports-metric-card
+        label="Usuarios activos"
+        [value]="formatInteger(metrics().usersCount)"
+        hint="Pasajeros con viajes en el rango"
+        icon="groups"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Viajes solicitados"
+        [value]="formatInteger(metrics().requestedTrips)"
+        hint="Solicitudes totales"
+        icon="hail"
+        tone="accent"
+      />
+
+      <app-reports-metric-card
+        label="Viajes completados"
+        [value]="formatInteger(metrics().completedTrips)"
+        hint="Viajes finalizados"
+        icon="check_circle"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Viajes cancelados"
+        [value]="formatInteger(metrics().cancelledTrips)"
+        hint="Cancelaciones de usuarios"
+        icon="cancel"
+        tone="danger"
+      />
+
+      <app-reports-metric-card
+        label="Gasto total"
+        [value]="formatMoney(metrics().totalSpent)"
+        hint="Total gastado por pasajeros"
+        icon="payments"
+        tone="primary"
+      />
+
+      <app-reports-metric-card
+        label="Ticket promedio"
+        [value]="formatMoney(metrics().averageTripValue)"
+        hint="Promedio por viaje completado"
+        icon="receipt_long"
+        tone="warning"
+      />
+
+      <app-reports-metric-card
+        label="Km recorridos"
+        [value]="formatKm(metrics().totalKm)"
+        hint="Distancia total acumulada"
+        icon="route"
+        tone="neutral"
+      />
+
+      <app-reports-metric-card
+        label="Tasa de cancelación"
+        [value]="formatPercent(metrics().cancellationRate)"
+        hint="Cancelados sobre solicitados"
+        icon="warning"
+        tone="danger"
+      />
+    </section>
+
+    <section class="reports-charts-grid">
+      <app-reports-chart-card
+        class="reports-chart reports-chart--wide"
+        title="Usuarios por gasto"
+        subtitle="Pasajeros que más dinero gastaron en el período"
+        icon="leaderboard"
+        [options]="spendingOptions()"
+        [empty]="usageEmpty()"
+        emptyTitle="Sin gasto de usuarios"
+        emptyDescription="No hay pasajeros con gasto en este rango."
+      />
+
+      <app-reports-chart-card
+        title="Distribución de gasto"
+        subtitle="Participación del gasto total por usuario"
+        icon="donut_large"
+        [options]="spendingShareOptions()"
+        [empty]="spendingShareEmpty()"
+        emptyTitle="Sin distribución de gasto"
+        emptyDescription="No hay importes suficientes para mostrar participación."
+      />
+
+      <app-reports-chart-card
+        title="Viajes por usuario"
+        subtitle="Solicitados, completados y cancelados"
+        icon="query_stats"
+        [options]="tripsOptions()"
+        [empty]="usageEmpty()"
+        emptyTitle="Sin viajes de usuarios"
+        emptyDescription="No hay actividad de pasajeros para este rango."
+      />
+
+      <app-reports-chart-card
+        title="Km por usuario"
+        subtitle="Pasajeros con mayor distancia recorrida"
+        icon="route"
+        [options]="kmOptions()"
+        [empty]="usageEmpty()"
+        emptyTitle="Sin km recorridos"
+        emptyDescription="No hay distancia acumulada para este rango."
+      />
+    </section>
+
+    <article class="reports-panel">
+      <header class="reports-panel__header">
+        <div>
+          <h2>Detalle de usuarios</h2>
+          <p>Pasajeros ordenados por gasto total y viajes completados</p>
+        </div>
+
+        <span class="reports-panel__icon">
+          <mat-icon>table_chart</mat-icon>
+        </span>
+      </header>
+
+      <div class="reports-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Solicitados</th>
+              <th>Completados</th>
+              <th>Cancelados</th>
+              <th>Km</th>
+              <th>Gastado</th>
+              <th>Ticket promedio</th>
+              <th>Cancelación</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (user of store.passengerUsage(); track user.passengerId) {
+              <tr>
+                <td>
+                  <strong class="entity-cell">
+                    {{ userName(user.passengerName, user.passengerId) }}
+                  </strong>
+                </td>
+                <td>{{ formatInteger(user.requestedTrips) }}</td>
+                <td>{{ formatInteger(user.completedTrips) }}</td>
+                <td>{{ formatInteger(user.cancelledTrips) }}</td>
+                <td>{{ formatKm(user.totalKm) }}</td>
+                <td>{{ formatMoney(user.totalSpent) }}</td>
+                <td>{{ formatMoney(user.averageTripValue) }}</td>
+                <td>
+                  {{
+                    formatPercent(
+                      user.requestedTrips
+                        ? (user.cancelledTrips / user.requestedTrips) * 100
+                        : 0
+                    )
+                  }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="8">
+                  <span class="reports-empty">
+                    No hay datos de usuarios para este rango.
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </article>
+  }
+</section>

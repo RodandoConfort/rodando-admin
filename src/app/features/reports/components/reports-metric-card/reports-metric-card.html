@@ -1,0 +1,24 @@
+<article
+  class="reports-metric"
+  [class.reports-metric--primary]="tone() === 'primary'"
+  [class.reports-metric--accent]="tone() === 'accent'"
+  [class.reports-metric--warning]="tone() === 'warning'"
+  [class.reports-metric--danger]="tone() === 'danger'"
+  [class.reports-metric--neutral]="tone() === 'neutral'"
+>
+  <div class="reports-metric__top">
+    <span>{{ label() }}</span>
+
+    @if (icon()) {
+      <span class="reports-metric__icon">
+        <mat-icon>{{ icon() }}</mat-icon>
+      </span>
+    }
+  </div>
+
+  <strong>{{ value() }}</strong>
+
+  @if (hint()) {
+    <small>{{ hint() }}</small>
+  }
+</article>

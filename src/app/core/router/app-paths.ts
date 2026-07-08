@@ -13,6 +13,7 @@ export const ADMIN_PATHS = {
   geography: 'geography',
   systemSettings: 'system-settings',
   pricePolicies: 'price-policies',
+  reports: 'reports',
 } as const;
 
 export const ROUTE_COMMANDS = {
@@ -78,5 +79,13 @@ export const ROUTE_COMMANDS = {
       ['/admin', 'price-policies', 'policies', id, 'edit'] as const,
 
     pricePoliciesSimulator: ['/admin', 'price-policies', 'simulator'] as const,
+
+    reports: ['/admin', 'reports'] as const,
+    reportsFinance: ['/admin', 'reports', 'finance'] as const,
+    reportsDrivers: ['/admin', 'reports', 'drivers'] as const,
+    reportsVehicles: ['/admin', 'reports', 'vehicles'] as const,
+    reportsUsers: ['/admin', 'reports', 'users'] as const,
+    reportsOperations: ['/admin', 'reports', 'operations'] as const,
+    reportsDataQuality: ['/admin', 'reports', 'data-quality'] as const,
   },
 } as const;
