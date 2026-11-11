@@ -53,6 +53,11 @@ export interface LoginResponse {
   accessToken: string;
   refreshToken?: string;
   sessionType: SessionType;
+  /*
+   * Referencia temporal enviada
+   * por el backend.
+   */
+  serverTime?: number;
   accessTokenExpiresAt: number;
   refreshTokenExpiresAt: number;
   sid?: string;
@@ -91,8 +96,4 @@ export interface AccessTokenPayload {
   iss?: string;
 }
 
-export type AuthStatus =
-  | 'idle'
-  | 'checking'
-  | 'authenticated'
-  | 'unauthenticated';
+export type AuthStatus = 'idle' | 'checking' | 'authenticated' | 'unauthenticated';

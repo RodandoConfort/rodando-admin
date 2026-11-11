@@ -236,15 +236,73 @@ export class AuthStore {
   private buildSession(response: LoginResponse): AuthSession {
     const payload = decodeAccessToken(response.accessToken);
 
+    const accessTokenExpiresAt =
+      this.resolveLocalDeadline(response.serverTime, response.accessTokenExpiresAt) ??
+      this.resolveAccessDeadlineFromJwt(payload) ??
+      response.accessTokenExpiresAt;
+
+    const refreshTokenExpiresAt =
+      this.resolveLocalDeadline(response.serverTime, response.refreshTokenExpiresAt) ??
+      response.refreshTokenExpiresAt;
+
     return {
       accessToken: response.accessToken,
+
       sessionType: response.sessionType,
-      accessTokenExpiresAt: response.accessTokenExpiresAt,
-      refreshTokenExpiresAt: response.refreshTokenExpiresAt,
+
+      accessTokenExpiresAt,
+
+      refreshTokenExpiresAt,
+
       sid: response.sid ?? payload?.sid,
+
       user: response.user ?? null,
+
       userType: response.userType ?? payload?.userType ?? null,
     };
+  }
+
+  private resolveLocalDeadline(
+    serverTime: number | undefined,
+
+    serverExpiresAt: number | undefined,
+  ): number | null {
+    if (
+      typeof serverTime !== 'number' ||
+      !Number.isFinite(serverTime) ||
+      typeof serverExpiresAt !== 'number' ||
+      !Number.isFinite(serverExpiresAt)
+    ) {
+      return null;
+    }
+
+    const remainingMs = serverExpiresAt - serverTime;
+
+    if (!Number.isFinite(remainingMs) || remainingMs <= 0) {
+      return Date.now();
+    }
+
+    return Date.now() + remainingMs;
+  }
+
+  private resolveAccessDeadlineFromJwt(
+    payload: ReturnType<typeof decodeAccessToken>,
+  ): number | null {
+    const iat = payload?.iat;
+
+    const exp = payload?.exp;
+
+    if (
+      typeof iat !== 'number' ||
+      !Number.isFinite(iat) ||
+      typeof exp !== 'number' ||
+      !Number.isFinite(exp) ||
+      exp <= iat
+    ) {
+      return null;
+    }
+
+    return Date.now() + (exp - iat) * 1000;
   }
 
   private buildUserFromSession(session: AuthSession): AuthUser | null {
